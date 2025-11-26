@@ -13,7 +13,7 @@ export default function Index() {
 
   const checkConfig = async () => {
     try {
-      const config = await AsyncStorage.getItem('app_config');
+      const config = await storage.getItem('app_config');
       setHasConfig(!!config);
     } catch (error) {
       console.error('Error checking config:', error);
