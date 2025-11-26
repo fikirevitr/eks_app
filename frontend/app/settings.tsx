@@ -85,7 +85,7 @@ export default function SettingsScreen() {
       const response = await axios.get(currentUrl);
       const config = response.data;
 
-      await AsyncStorage.setItem('app_config', JSON.stringify(config));
+      await storage.setItem('app_config', JSON.stringify(config));
 
       Alert.alert('Başarılı', 'Konfigürasyon yenilendi', [
         { text: 'Tamam', onPress: () => router.back() },
