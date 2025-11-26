@@ -1,0 +1,189 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import Constants from 'expo-constants';
+
+const API_URL = Constants.expoConfig?.extra?.EXPO_BACKEND_URL || 'http://localhost:8001';
+
+export default function SetupScreen() {
+  const router = useRouter();
+  const [jsonUrl, setJsonUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!jsonUrl.trim()) {
+      Alert.alert('Hata', 'Lütfen JSON URL giriniz');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Fetch JSON from URL
+      const response = await axios.get(jsonUrl);
+      const config = response.data;
+
+      // Validate config structure
+      if (!config.app_name || !config.pages || !config.buttons) {
+        throw new Error('Invalid configuration format');
+      }
+
+      // Store config and URL
+      await AsyncStorage.setItem('app_config', JSON.stringify(config));
+      await AsyncStorage.setItem('config_url', jsonUrl);
+
+      Alert.alert('Başarılı', 'Konfigürasyon yüklendi', [
+        { text: 'Tamam', onPress: () => router.replace('/home') },
+      ]);
+    } catch (error: any) {
+      console.error('Error loading config:', error);
+      Alert.alert(
+        'Hata',
+        error.response?.data?.detail || error.message || 'JSON yüklenirken hata oluştu'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Oniks EKS APP</Text>
+          <Text style={styles.subtitle}>Konfigürasyon Kurulumu</Text>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>JSON Konfigürasyon URL</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="https://example.com/config.json"
+              placeholderTextColor="#999"
+              value={jsonUrl}
+              onChangeText={setJsonUrl}
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!loading}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Başlat</Text>
+            )}
+          </TouchableOpacity>
+
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
+              JSON dosyanız aşağıdaki formatta olmalıdır:
+            </Text>
+            <Text style={styles.infoCode}>
+              {`{\n  "app_name": "...",\n  "version": "...",\n  "pages": [...],\n  "buttons": [...]\n}`}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  content: {
+    padding: 24,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 48,
+  },
+  inputContainer: {
+    marginBottom: 24,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    color: '#333',
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  infoContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  infoCode: {
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontSize: 12,
+    color: '#333',
+    backgroundColor: '#f9f9f9',
+    padding: 12,
+    borderRadius: 8,
+  },
+});
