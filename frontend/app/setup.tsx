@@ -41,8 +41,8 @@ export default function SetupScreen() {
       }
 
       // Store config and URL
-      await AsyncStorage.setItem('app_config', JSON.stringify(config));
-      await AsyncStorage.setItem('config_url', jsonUrl);
+      await storage.setItem('app_config', JSON.stringify(config));
+      await storage.setItem('config_url', jsonUrl);
 
       Alert.alert('Başarılı', 'Konfigürasyon yüklendi', [
         { text: 'Tamam', onPress: () => router.replace('/home') },
