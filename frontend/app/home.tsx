@@ -69,7 +69,7 @@ export default function HomeScreen() {
 
   const loadConfig = async () => {
     try {
-      const configStr = await AsyncStorage.getItem('app_config');
+      const configStr = await storage.getItem('app_config');
       if (configStr) {
         const parsedConfig: AppConfig = JSON.parse(configStr);
         
