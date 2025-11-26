@@ -259,6 +259,18 @@ async def get_sample_config():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading sample config: {str(e)}")
 
+@api_router.get("/config/simple")
+async def get_simple_config():
+    """Get simple configuration JSON with 6 buttons"""
+    import json
+    try:
+        config_path = Path("/app/simple_config.json")
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config_data = json.load(f)
+        return config_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading simple config: {str(e)}")
+
 # Include router
 app.include_router(api_router)
 
