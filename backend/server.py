@@ -247,6 +247,18 @@ async def validate_config(config: AppConfig):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@api_router.get("/config/sample")
+async def get_sample_config():
+    """Get sample configuration JSON"""
+    import json
+    try:
+        config_path = Path("/app/sample_config.json")
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config_data = json.load(f)
+        return config_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading sample config: {str(e)}")
+
 # Include router
 app.include_router(api_router)
 
