@@ -1,0 +1,186 @@
+{
+  "app_name": "Oniks EKS APP",
+  "version": "1.0",
+  "pages": [
+    {
+      "pageId": "page_1",
+      "pageName": "Ana Kontroller",
+      "pageIcon": "home",
+      "order": 1
+    },
+    {
+      "pageId": "page_2",
+      "pageName": "Sistem Bakım",
+      "pageIcon": "build",
+      "order": 2
+    },
+    {
+      "pageId": "page_3",
+      "pageName": "Güvenlik",
+      "pageIcon": "shield-checkmark",
+      "order": 3
+    }
+  ],
+  "buttons": [
+    {
+      "id": "btn_1",
+      "pageId": "page_1",
+      "order": 1,
+      "title": "Sistem Yeniden Başlat",
+      "subtitle": "Pi'yi restart eder",
+      "icon": "refresh-circle",
+      "color": "#FF5733",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "sudo reboot"
+      }
+    },
+    {
+      "id": "btn_2",
+      "pageId": "page_1",
+      "order": 2,
+      "title": "Disk Kullanımı",
+      "subtitle": "Disk durumunu göster",
+      "icon": "save",
+      "color": "#33C3FF",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "df -h"
+      }
+    },
+    {
+      "id": "btn_3",
+      "pageId": "page_1",
+      "order": 3,
+      "title": "CPU Sıcaklığı",
+      "subtitle": "Anlık sıcaklık ölç",
+      "icon": "thermometer",
+      "color": "#FFA533",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "vcgencmd measure_temp"
+      }
+    },
+    {
+      "id": "btn_4",
+      "pageId": "page_1",
+      "order": 4,
+      "title": "Network Durumu",
+      "subtitle": "Ağ bağlantısını kontrol et",
+      "icon": "wifi",
+      "color": "#4CAF50",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "ifconfig"
+      }
+    },
+    {
+      "id": "btn_5",
+      "pageId": "page_2",
+      "order": 1,
+      "title": "Sistem Güncellemesi",
+      "subtitle": "APT güncelleme kontrolü",
+      "icon": "cloud-download",
+      "color": "#9C27B0",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "sudo apt update"
+      }
+    },
+    {
+      "id": "btn_6",
+      "pageId": "page_2",
+      "order": 2,
+      "title": "Log Temizle",
+      "subtitle": "Sistem loglarını temizle",
+      "icon": "trash",
+      "color": "#FF9800",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "sudo journalctl --vacuum-time=7d"
+      }
+    },
+    {
+      "id": "btn_7",
+      "pageId": "page_2",
+      "order": 3,
+      "title": "Bellek Durumu",
+      "subtitle": "RAM kullanımı",
+      "icon": "hardware-chip",
+      "color": "#00BCD4",
+      "ssh": {
+        "host": "192.168.1.100",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "free -h"
+      }
+    },
+    {
+      "id": "btn_8",
+      "pageId": "page_3",
+      "order": 1,
+      "title": "Aktif Kullanıcılar",
+      "subtitle": "Sisteme bağlı kullanıcılar",
+      "icon": "people",
+      "color": "#E91E63",
+      "ssh": {
+        "host": "192.168.1.101",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry123",
+        "command": "who"
+      }
+    },
+    {
+      "id": "btn_9",
+      "pageId": "page_3",
+      "order": 2,
+      "title": "Güvenlik Duvarı",
+      "subtitle": "UFW durumunu kontrol et",
+      "icon": "shield",
+      "color": "#F44336",
+      "ssh": {
+        "host": "192.168.1.101",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry123",
+        "command": "sudo ufw status"
+      }
+    },
+    {
+      "id": "btn_10",
+      "pageId": "page_3",
+      "order": 3,
+      "title": "Son Giriş Kayıtları",
+      "subtitle": "Son 10 login denemesi",
+      "icon": "time",
+      "color": "#795548",
+      "ssh": {
+        "host": "192.168.1.101",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry123",
+        "command": "last -n 10"
+      }
+    }
+  ]
+}
