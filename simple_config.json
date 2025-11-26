@@ -1,0 +1,110 @@
+{
+  "app_name": "Oniks EKS APP",
+  "version": "1.0",
+  "pages": [
+    {
+      "pageId": "main",
+      "pageName": "Kontrol Paneli",
+      "pageIcon": "apps",
+      "order": 1
+    }
+  ],
+  "buttons": [
+    {
+      "id": "btn_1",
+      "pageId": "main",
+      "order": 1,
+      "title": "Sistem Durumu",
+      "subtitle": "Uptime ve yük bilgisi",
+      "icon": "stats-chart",
+      "color": "#4CAF50",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "uptime"
+      }
+    },
+    {
+      "id": "btn_2",
+      "pageId": "main",
+      "order": 2,
+      "title": "Disk Kullanımı",
+      "subtitle": "Boş alan kontrolü",
+      "icon": "server",
+      "color": "#2196F3",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "df -h /"
+      }
+    },
+    {
+      "id": "btn_3",
+      "pageId": "main",
+      "order": 3,
+      "title": "Bellek Durumu",
+      "subtitle": "RAM kullanımı",
+      "icon": "hardware-chip",
+      "color": "#FF9800",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "free -m"
+      }
+    },
+    {
+      "id": "btn_4",
+      "pageId": "main",
+      "order": 4,
+      "title": "CPU Sıcaklığı",
+      "subtitle": "Termal durum",
+      "icon": "thermometer",
+      "color": "#F44336",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "vcgencmd measure_temp"
+      }
+    },
+    {
+      "id": "btn_5",
+      "pageId": "main",
+      "order": 5,
+      "title": "Ağ Bağlantısı",
+      "subtitle": "IP ve network bilgisi",
+      "icon": "wifi",
+      "color": "#9C27B0",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "ip addr show"
+      }
+    },
+    {
+      "id": "btn_6",
+      "pageId": "main",
+      "order": 6,
+      "title": "Çalışan Servisler",
+      "subtitle": "Aktif systemd servisleri",
+      "icon": "list",
+      "color": "#00BCD4",
+      "ssh": {
+        "host": "192.168.1.50",
+        "port": 22,
+        "username": "pi",
+        "password": "raspberry",
+        "command": "systemctl list-units --type=service --state=running"
+      }
+    }
+  ]
+}
