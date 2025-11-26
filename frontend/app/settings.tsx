@@ -29,7 +29,7 @@ export default function SettingsScreen() {
 
   const loadCurrentUrl = async () => {
     try {
-      const url = await AsyncStorage.getItem('config_url');
+      const url = await storage.getItem('config_url');
       if (url) {
         setCurrentUrl(url);
         setJsonUrl(url);
