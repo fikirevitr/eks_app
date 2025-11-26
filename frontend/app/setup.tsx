@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '../utils/storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
