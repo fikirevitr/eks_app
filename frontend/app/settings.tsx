@@ -108,7 +108,7 @@ export default function SettingsScreen() {
           text: 'Sil',
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.clear();
+            await storage.clear();
             Alert.alert('Başarılı', 'Veriler temizlendi', [
               { text: 'Tamam', onPress: () => router.replace('/setup') },
             ]);
