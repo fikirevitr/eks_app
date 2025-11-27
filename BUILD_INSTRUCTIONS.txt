@@ -1,0 +1,80 @@
+=====================================================
+  ONIKS EKS APP - APK BUILD INSTRUCTIONS
+=====================================================
+
+ADIM 1: ZIP Dosyasini Cikart
+-----------------------------------------------------
+1. oniks-eks-app-clean.tar.gz dosyasini masaustune kaydedin
+2. Dosyaya sag tikla -> "Extract All" veya "Ayikla"
+3. "frontend" klasoru olusacak
+
+
+ADIM 2: Terminal/CMD Ac
+-----------------------------------------------------
+1. Windows tusuna basin + R
+2. "cmd" yazin ve Enter
+3. Masaustune git:
+   cd Desktop\frontend
+
+
+ADIM 3: Token ile Login Ol
+-----------------------------------------------------
+set EXPO_TOKEN=5RfoCpnMuYR9lW6osxa8TEYYOmPxtzq1S7elB6WA
+
+(Mac/Linux icin: export EXPO_TOKEN=5RfoCpnMuYR9lW6osxa8TEYYOmPxtzq1S7elB6WA)
+
+
+ADIM 4: EAS CLI Kur
+-----------------------------------------------------
+npm install -g eas-cli
+
+(Bu komut 1-2 dakika surebilir)
+
+
+ADIM 5: Login Kontrol
+-----------------------------------------------------
+eas whoami
+
+(fikirevi yazisini gormeli)
+
+
+ADIM 6: Bagimliliklari Yukle
+-----------------------------------------------------
+npm install
+
+(Bu komut 3-5 dakika surebilir, bekleyin)
+
+
+ADIM 7: Build Baslat
+-----------------------------------------------------
+eas build --platform android --profile preview
+
+Sorular gelecek:
+- "Generate a new Keystore?" -> y (Yes)
+- Diger sorular -> y (Yes)
+
+
+ADIM 8: Build Tamamlanmasini Bekle
+-----------------------------------------------------
+- Build cloud'da yapilir, 15-20 dakika surer
+- Terminal'de link goreceksiniz, tarayicida acabilirsiniz
+- Build bitince APK download linki verilecek
+
+
+ADIM 9: APK'yi Indir
+-----------------------------------------------------
+- Terminal'deki linke tiklayin
+- Veya expo.dev'de login olup Projects bolumunden indirin
+- APK dosyasini telefonunuza yukleyin
+
+
+=====================================================
+SORUN YASARSAN?
+=====================================================
+
+1. "npm not found" -> Node.js'i yeniden kurun
+2. "eas not found" -> "npm install -g eas-cli" tekrar calistirin
+3. Build fails -> Loglari kontrol edin, hata mesajini okuyun
+4. Token invalid -> Token'i dogru kopyaladiginizdan emin olun
+
+=====================================================
