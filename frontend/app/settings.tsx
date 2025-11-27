@@ -51,8 +51,9 @@ export default function SettingsScreen() {
 
     setLoading(true);
     try {
-      // Construct full URL
-      const fullUrl = BASE_URL + fileName.trim();
+      // Construct full URL - automatically add .json extension
+      const fileNameWithExtension = fileName.trim() + '.json';
+      const fullUrl = BASE_URL + fileNameWithExtension;
       
       // Fetch new config through backend proxy
       const response = await axios.get(`${API_URL}/api/config/fetch`, {
