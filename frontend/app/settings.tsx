@@ -220,7 +220,7 @@ export default function SettingsScreen() {
             <Text style={styles.sectionTitle}>Konfigürasyon Dosya Adı</Text>
             <TextInput
               style={styles.input}
-              placeholder="config.json"
+              placeholder="config (uzantısız)"
               placeholderTextColor="#999"
               value={fileName}
               onChangeText={setFileName}
