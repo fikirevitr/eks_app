@@ -73,7 +73,13 @@ export default function SetupScreen() {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
-          <Text style={styles.title}>Oniks EKS APP</Text>
+          <View style={styles.logoContainer}>
+            <Image 
+              source={require('../assets/images/eks_logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
           <Text style={styles.subtitle}>Konfigürasyon Kurulumu</Text>
 
           <View style={styles.inputContainer}>
