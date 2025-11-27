@@ -110,6 +110,26 @@ export default function SetupScreen() {
               <Text style={styles.buttonText}>Başlat</Text>
             )}
           </TouchableOpacity>
+
+          {/* Info Box */}
+          <View style={styles.infoBox}>
+            <Ionicons name="information-circle-outline" size={20} color="#007AFF" style={styles.infoIcon} />
+            <View style={styles.infoContent}>
+              <Text style={styles.infoText}>
+                Eğer konfigürasyon dosya adına sahip değilseniz{' '}
+                <Text
+                  style={styles.linkText}
+                  onPress={() => Linking.openURL('https://oniksbilgi.com')}
+                >
+                  Oniks Bilgi Sistemleri
+                </Text>
+                {' '}ile iletişime geçiniz.
+              </Text>
+              <TouchableOpacity onPress={() => Linking.openURL('mailto:oniksbilgi@gmail.com')}>
+                <Text style={styles.emailText}>oniksbilgi@gmail.com</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
