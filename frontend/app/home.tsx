@@ -318,7 +318,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: 16,
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 16,
   },
   commandButton: {
     flexDirection: 'row',
