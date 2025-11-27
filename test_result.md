@@ -154,7 +154,17 @@ backend:
         comment: "GET /api/config/fetch endpoint tested successfully. Correctly handles external URL proxy functionality with proper error handling for 404 responses from external config servers. Returns appropriate 502 status with detailed error message when external URL is not found."
 
 frontend:
-  # No frontend testing requested
+  - task: "Settings page UI simplification"
+    implemented: true
+    working: true
+    file: "frontend/app/settings.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Settings page UI successfully simplified. Removed filename editing capability. Now only shows refresh and clear buttons. Help text updated. Web dialog for 'Clear Data' working correctly - confirmed with screenshot testing."
 
 metadata:
   created_by: "testing_agent"
