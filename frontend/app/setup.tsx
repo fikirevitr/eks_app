@@ -103,15 +103,6 @@ export default function SetupScreen() {
               <Text style={styles.buttonText}>Başlat</Text>
             )}
           </TouchableOpacity>
-
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              JSON dosyanız aşağıdaki formatta olmalıdır:
-            </Text>
-            <Text style={styles.infoCode}>
-              {`{\n  "app_name": "...",\n  "version": "...",\n  "pages": [...],\n  "buttons": [...]\n}`}
-            </Text>
-          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
