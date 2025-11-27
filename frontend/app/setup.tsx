@@ -31,7 +31,7 @@ export default function SetupScreen() {
     }
 
     setLoading(true);
-    try:
+    try {
       // Construct full URL
       const fullUrl = BASE_URL + fileName.trim();
       
