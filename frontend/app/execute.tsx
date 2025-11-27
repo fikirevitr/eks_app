@@ -186,29 +186,31 @@ export default function ExecuteScreen() {
         )}
       </ScrollView>
 
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        {status === 'error' && (
-          <TouchableOpacity
-            style={[styles.actionButton, styles.retryButton]}
-            onPress={handleRetry}
-            disabled={executing}
-          >
-            <Ionicons name="refresh" size={20} color="#fff" />
-            <Text style={styles.actionButtonText}>Tekrar Dene</Text>
-          </TouchableOpacity>
-        )}
-        {(status === 'success' || status === 'error') && (
-          <TouchableOpacity
-            style={[styles.actionButton, styles.closeButton]}
-            onPress={handleClose}
-          >
-            <Ionicons name="checkmark" size={20} color="#fff" />
-            <Text style={styles.actionButtonText}>Tamam</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </SafeAreaView>
+      {/* Action Buttons with SafeArea */}
+      <SafeAreaView style={styles.actionButtonsSafeArea} edges={['bottom']}>
+        <View style={styles.actionButtons}>
+          {status === 'error' && (
+            <TouchableOpacity
+              style={[styles.actionButton, styles.retryButton]}
+              onPress={handleRetry}
+              disabled={executing}
+            >
+              <Ionicons name="refresh" size={20} color="#fff" />
+              <Text style={styles.actionButtonText}>Tekrar Dene</Text>
+            </TouchableOpacity>
+          )}
+          {(status === 'success' || status === 'error') && (
+            <TouchableOpacity
+              style={[styles.actionButton, styles.closeButton]}
+              onPress={handleClose}
+            >
+              <Ionicons name="checkmark" size={20} color="#fff" />
+              <Text style={styles.actionButtonText}>Tamam</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 
