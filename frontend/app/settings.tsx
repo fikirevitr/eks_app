@@ -113,36 +113,64 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleClearData = () => {
-    Alert.alert(
-      'Tüm Verileri Temizle',
-      'Tüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?',
-      [
-        { text: 'İptal', style: 'cancel' },
-        {
-          text: 'Evet, Temizle',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              // Clear all storage
-              await storage.clear();
-              
-              // Clear state
-              setCurrentFileName('');
-              setFileName('');
-              
-              // Show success message and redirect
-              Alert.alert('Başarılı', 'Tüm veriler temizlendi', [
-                { text: 'Tamam', onPress: () => router.replace('/setup') },
-              ]);
-            } catch (error) {
-              console.error('Error clearing data:', error);
-              Alert.alert('Hata', 'Veriler temizlenirken bir hata oluştu');
-            }
+  const handleClearData = async () => {
+    // Use platform-specific confirmation
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm(
+        'Tüm Verileri Temizle\n\nTüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?'
+      );
+      
+      if (confirmed) {
+        try {
+          // Clear all storage
+          await storage.clear();
+          
+          // Clear state
+          setCurrentFileName('');
+          setFileName('');
+          
+          // Show success message
+          window.alert('Başarılı! Tüm veriler temizlendi.');
+          
+          // Redirect to setup
+          router.replace('/setup');
+        } catch (error) {
+          console.error('Error clearing data:', error);
+          window.alert('Hata: Veriler temizlenirken bir hata oluştu');
+        }
+      }
+    } else {
+      // Mobile: Use Alert
+      Alert.alert(
+        'Tüm Verileri Temizle',
+        'Tüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?',
+        [
+          { text: 'İptal', style: 'cancel' },
+          {
+            text: 'Evet, Temizle',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                // Clear all storage
+                await storage.clear();
+                
+                // Clear state
+                setCurrentFileName('');
+                setFileName('');
+                
+                // Show success message and redirect
+                Alert.alert('Başarılı', 'Tüm veriler temizlendi', [
+                  { text: 'Tamam', onPress: () => router.replace('/setup') },
+                ]);
+              } catch (error) {
+                console.error('Error clearing data:', error);
+                Alert.alert('Hata', 'Veriler temizlenirken bir hata oluştu');
+              }
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   return (
