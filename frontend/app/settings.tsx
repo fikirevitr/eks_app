@@ -17,11 +17,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
+const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
+
 export default function SettingsScreen() {
   const router = useRouter();
-  const [jsonUrl, setJsonUrl] = useState('');
+  const [fileName, setFileName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState('');
+  const [currentFileName, setCurrentFileName] = useState('');
 
   useEffect(() => {
     loadCurrentUrl();
