@@ -23,7 +23,6 @@ const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const [fileName, setFileName] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentFileName, setCurrentFileName] = useState('');
 
