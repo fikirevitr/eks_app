@@ -94,7 +94,13 @@ export default function ExecuteScreen() {
     } finally {
       setExecuting(false);
     }
-  };
+  }, [button]);
+
+  useEffect(() => {
+    if (button) {
+      executeCommand();
+    }
+  }, [button, executeCommand]);
 
   const handleRetry = () => {
     executeCommand();
