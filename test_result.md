@@ -166,6 +166,7 @@ test_plan:
   current_focus:
     - "Root API endpoint"
     - "Config sample endpoint"
+    - "Config fetch endpoint"
     - "SSH execute endpoint"
   stuck_tasks: []
   test_all: false
