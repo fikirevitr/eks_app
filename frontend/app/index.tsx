@@ -78,4 +78,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
+  splashContainer: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    justifyContent: 'space-between',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 280,
+    height: 120,
+  },
+  footer: {
+    paddingBottom: 40,
+    alignItems: 'center',
+  },
+  companyName: {
+    fontSize: 13,
+    color: '#666',
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  appName: {
+    fontSize: 11,
+    color: '#999',
+    marginBottom: 8,
+  },
+  version: {
+    fontSize: 10,
+    color: '#bbb',
+    fontWeight: '300',
+  },
 });
