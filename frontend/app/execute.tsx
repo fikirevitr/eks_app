@@ -268,9 +268,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
   },
+  headerSafeArea: {
+    // backgroundColor will be set dynamically
+  },
   header: {
     padding: 20,
-    paddingTop: 16,
+    paddingBottom: 16,
   },
   backButton: {
     width: 40,
