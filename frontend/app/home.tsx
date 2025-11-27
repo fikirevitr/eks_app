@@ -464,6 +464,41 @@ const styles = StyleSheet.create({
   buttonArrow: {
     marginLeft: 8,
   },
+  statusBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  buttonTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 2,
+  },
+  textBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  badgeText: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  statusMessage: {
+    fontSize: 10,
+    color: 'rgba(255, 255, 255, 0.7)',
+    marginTop: 2,
+    fontStyle: 'italic',
+  },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
