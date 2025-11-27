@@ -300,8 +300,26 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   infoValue: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '600',
     color: '#333',
+    marginBottom: 12,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 6,
+  },
+  dateLabel: {
+    fontSize: 12,
+    color: '#666',
+    fontWeight: '500',
+  },
+  dateValue: {
+    fontSize: 12,
+    color: '#333',
+    fontWeight: '400',
   },
   section: {
     marginBottom: 24,
