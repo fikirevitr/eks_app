@@ -41,49 +41,6 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleUpdate = async () => {
-    if (!fileName.trim()) {
-      Alert.alert('Hata', 'Lütfen dosya adı giriniz');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // Construct full URL - automatically add .json extension
-      const fileNameWithExtension = fileName.trim() + '.json';
-      const fullUrl = BASE_URL + fileNameWithExtension;
-      
-      // Fetch new config through backend proxy
-      const response = await axios.get(`${API_URL}/api/config/fetch`, {
-        params: { url: fullUrl },
-        timeout: 60000, // 60 seconds
-      });
-      const config = response.data;
-
-      // Validate
-      if (!config.app_name || !config.pages || !config.buttons) {
-        throw new Error('Invalid configuration format');
-      }
-
-      // Update storage
-      await storage.setItem('app_config', JSON.stringify(config));
-      await storage.setItem('config_file_name', fileName.trim());
-      await storage.setItem('config_url', fullUrl);
-
-      Alert.alert('Başarılı', 'Konfigürasyon güncellendi', [
-        { text: 'Tamam', onPress: () => router.back() },
-      ]);
-    } catch (error: any) {
-      console.error('Error updating config:', error);
-      Alert.alert(
-        'Hata',
-        error.response?.data?.detail || error.message || 'JSON yüklenirken hata oluştu'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleRefresh = async () => {
     if (!currentFileName) {
       Alert.alert('Hata', 'Mevcut konfigürasyon dosyası bulunamadı');
