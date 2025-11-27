@@ -1,0 +1,143 @@
+=====================================================
+  ONIKS EKS APP - NATIVE SSH APK BUILD REHBERI
+=====================================================
+
+GEREKSINIMLER:
+----------------------------------------------------
+1. Node.js (v24+)
+   Indirme: https://nodejs.org/dist/v24.11.1/node-v24.11.1-x64.msi
+   
+2. Git (Opsiyonel)
+   Indirme: https://git-scm.com/download/win
+
+
+KURULUM ADIMLARI:
+----------------------------------------------------
+
+ADIM 1: Projeyi Hazirla
+-----------------------
+1. oniks-native-ssh-app.tar.gz dosyasini masaustune kaydedin
+2. WinRAR veya 7-Zip ile acin
+3. "frontend" klasoru cikar
+
+
+ADIM 2: Build Script Olustur
+-----------------------------
+1. Masaustunde "oniks-app" klasoru olusturun
+2. "frontend" klasorunu icine tasiyin
+3. "build-apk.bat" dosyasi olusturun (NOT DEFTERI ile)
+4. Asagidaki kodu icine kopyalayin:
+
+--- BURADAN BASLAT ---
+@echo off
+echo ========================================
+echo   ONIKS EKS APP - APK BUILD
+echo ========================================
+echo.
+
+set EXPO_TOKEN=5RfoCpnMuYR9lW6osxa8TEYYOmPxtzq1S7elB6WA
+set EAS_NO_VCS=1
+
+echo [1/5] Node.js kontrol ediliyor...
+node -v
+if %errorlevel% neq 0 (
+    echo HATA: Node.js kurulu degil!
+    pause
+    exit /b 1
+)
+echo OK!
+echo.
+
+echo [2/5] EAS CLI kuruluyor...
+call npm install -g eas-cli
+echo OK!
+echo.
+
+echo [3/5] Login kontrol ediliyor...
+call eas whoami
+echo OK!
+echo.
+
+echo [4/5] Proje hazirlaniyor...
+cd frontend
+call npm install
+echo OK!
+echo.
+
+echo [5/5] APK Build baslatiliyor...
+echo.
+echo Sorular gelecek - hepsine "y" yazin!
+echo.
+pause
+
+call eas build --platform android --profile preview
+
+echo.
+echo BUILD TAMAMLANDI!
+echo APK linki yukarda gorunecek.
+echo.
+pause
+--- BURAYA KADAR ---
+
+5. Kaydet ve kapat
+
+
+ADIM 3: Build Baslat
+---------------------
+1. "build-apk.bat" dosyasina CIFT TIKLA
+2. Pencere acilacak, bekleyin
+3. Sorular gelince:
+   - "Generate a new Keystore?" -> y (Enter)
+   - Diger sorular -> y (Enter)
+4. Build baslar (15-20 dakika surer)
+5. Bitince APK linki gorunur
+
+
+ADIM 4: APK Indir
+------------------
+1. Terminal'de APK linkini goreceksiniz:
+   https://expo.dev/artifacts/eas/xxxxx.apk
+2. Linki kopyalayin
+3. Tarayicida acin
+4. APK indirilir!
+
+
+SORUN GIDERME:
+----------------------------------------------------
+
+"Node.js kurulu degil" hatasi:
+-> Node.js'i kurun ve bilgisayari yeniden baslatmaya edin
+
+"npm not found" hatasi:
+-> CMD'yi kapat-ac, tekrar dene
+
+"EAS CLI kurulamadi":
+-> Internet baglantisini kontrol edin
+
+"Login yapilamadi":
+-> Token'in dogru kopyalandigini kontrol edin
+
+"Build failed":
+-> Terminal'deki hata mesajini okuyun
+-> Loglarda "error" kelimesini arayin
+
+
+ONEMLI NOTLAR:
+----------------------------------------------------
+- Ilk build 20-30 dakika surebilir
+- Internet baglantisi gerekli (build cloud'da yapilir)
+- Build ucretsiz (Expo free plan)
+- APK boyutu: ~50-80 MB
+
+
+DESTEK:
+----------------------------------------------------
+Sorun yasarsaniz:
+1. Hata mesajini tam olarak not edin
+2. Hangi adimda hata aldiginizi belirtin
+3. Ekran goruntusu alin
+
+
+=====================================================
+BASARILAR!
+=====================================================
