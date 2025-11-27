@@ -9,6 +9,7 @@ import {
   Alert,
   Dimensions,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { storage } from '../utils/storage';
