@@ -228,7 +228,7 @@ export default function HomeScreen() {
             key={button.id}
             button={button}
             onPress={() => handleButtonPress(button)}
-            isExecuting={executingButton === button.id}
+            buttonStatus={buttonStatuses[button.id]}
           />
         ))}
         
