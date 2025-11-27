@@ -35,7 +35,6 @@ export default function SettingsScreen() {
       const savedFileName = await storage.getItem('config_file_name');
       if (savedFileName) {
         setCurrentFileName(savedFileName);
-        setFileName(savedFileName);
       }
     } catch (error) {
       console.error('Error loading file name:', error);
