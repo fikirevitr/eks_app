@@ -41,7 +41,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#000"
         }
-      ]
+      ],
+      "./plugins/withSSH.js"
     ],
     "experiments": {
       "typedRoutes": true
