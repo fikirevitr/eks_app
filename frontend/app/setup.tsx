@@ -17,22 +17,26 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 
 const API_URL = Constants.expoConfig?.extra?.EXPO_BACKEND_URL || 'http://localhost:8001';
+const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SetupScreen() {
   const router = useRouter();
-  const [jsonUrl, setJsonUrl] = useState('');
+  const [fileName, setFileName] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!jsonUrl.trim()) {
-      Alert.alert('Hata', 'Lütfen JSON URL giriniz');
+    if (!fileName.trim()) {
+      Alert.alert('Hata', 'Lütfen dosya adı giriniz');
       return;
     }
 
     setLoading(true);
     try {
+      // Construct full URL
+      const fullUrl = BASE_URL + fileName.trim();
+      
       // Fetch JSON from URL
-      const response = await axios.get(jsonUrl);
+      const response = await axios.get(fullUrl);
       const config = response.data;
 
       // Validate config structure
