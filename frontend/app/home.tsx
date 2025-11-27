@@ -130,7 +130,8 @@ export default function HomeScreen() {
   const showTabs = config.pages.length > 1;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{config.app_name}</Text>
