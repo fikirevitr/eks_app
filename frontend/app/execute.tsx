@@ -63,6 +63,17 @@ export default function ExecuteScreen() {
     setOutput('');
     setError('');
 
+    // Save executing status to storage
+    try {
+      await storage.setItem(`button_status_${button.id}`, JSON.stringify({
+        status: 'executing',
+        timestamp: new Date().toISOString(),
+        message: 'Çalıştırılıyor...',
+      }));
+    } catch (e) {
+      console.error('Error saving button status:', e);
+    }
+
     try {
       setStatus('executing');
       
@@ -80,18 +91,40 @@ export default function ExecuteScreen() {
       if (response.data.success) {
         setStatus('success');
         setOutput(response.data.output || 'Komut başarıyla çalıştırıldı');
+        
+        // Save success status
+        await storage.setItem(`button_status_${button.id}`, JSON.stringify({
+          status: 'success',
+          timestamp: new Date().toISOString(),
+          message: response.data.output || 'Başarılı',
+        }));
       } else {
         setStatus('error');
         setError(response.data.error || 'Komut çalıştırılamadı');
+        
+        // Save error status
+        await storage.setItem(`button_status_${button.id}`, JSON.stringify({
+          status: 'error',
+          timestamp: new Date().toISOString(),
+          message: response.data.error || 'Hata',
+        }));
       }
     } catch (err: any) {
       console.error('Error executing command:', err);
       setStatus('error');
-      setError(
-        err.response?.data?.detail ||
-        err.message ||
-        'SSH komut çalıştırma hatası'
-      );
+      const errorMsg = err.response?.data?.detail || err.message || 'SSH komut çalıştırma hatası';
+      setError(errorMsg);
+      
+      // Save error status
+      try {
+        await storage.setItem(`button_status_${button.id}`, JSON.stringify({
+          status: 'error',
+          timestamp: new Date().toISOString(),
+          message: errorMsg,
+        }));
+      } catch (e) {
+        console.error('Error saving error status:', e);
+      }
     } finally {
       setExecuting(false);
     }
