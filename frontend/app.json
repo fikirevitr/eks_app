@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "EXPO_BACKEND_URL": "https://oniksbilgi.com.tr",
+      "EXPO_BACKEND_URL": "https://oniksbilgi.com.tr/api",
       "router": {},
       "eas": {
         "projectId": "ff30de98-0030-4bd5-823a-6f363a7f412e"
