@@ -31,26 +31,29 @@ export default function SettingsScreen() {
 
   const loadCurrentUrl = async () => {
     try {
-      const url = await storage.getItem('config_url');
-      if (url) {
-        setCurrentUrl(url);
-        setJsonUrl(url);
+      const savedFileName = await storage.getItem('config_file_name');
+      if (savedFileName) {
+        setCurrentFileName(savedFileName);
+        setFileName(savedFileName);
       }
     } catch (error) {
-      console.error('Error loading URL:', error);
+      console.error('Error loading file name:', error);
     }
   };
 
   const handleUpdate = async () => {
-    if (!jsonUrl.trim()) {
-      Alert.alert('Hata', 'Lütfen JSON URL giriniz');
+    if (!fileName.trim()) {
+      Alert.alert('Hata', 'Lütfen dosya adı giriniz');
       return;
     }
 
     setLoading(true);
     try {
+      // Construct full URL
+      const fullUrl = BASE_URL + fileName.trim();
+      
       // Fetch new config
-      const response = await axios.get(jsonUrl);
+      const response = await axios.get(fullUrl);
       const config = response.data;
 
       // Validate
