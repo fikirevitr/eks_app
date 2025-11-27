@@ -41,7 +41,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#000"
         }
-      ]
+      ],
+      "@speedshield/react-native-ssh-sftp"
     ],
     "experiments": {
       "typedRoutes": true
