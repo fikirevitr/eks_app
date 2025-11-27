@@ -95,6 +95,48 @@ def test_config_sample_endpoint():
         print(f"   ❌ Request failed: {e}")
         return False
 
+def test_config_fetch_endpoint():
+    """Test GET /api/config/fetch endpoint"""
+    print("\n🔍 Testing GET /api/config/fetch endpoint...")
+    
+    # Test with the URL specified in the review request
+    test_url = "https://oniksbilgi.com.tr/cdn/jsons/simple_config.json"
+    
+    try:
+        response = requests.get(
+            f"{BACKEND_URL}/api/config/fetch", 
+            params={"url": test_url},
+            timeout=30
+        )
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   Response keys: {list(data.keys())}")
+            
+            # Verify expected structure
+            required_fields = ["app_name", "pages", "buttons"]
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if missing_fields:
+                print(f"   ❌ Missing required fields: {missing_fields}")
+                return False
+            
+            print(f"   ✅ Config fetch endpoint working correctly")
+            print(f"   - App name: {data.get('app_name')}")
+            print(f"   - Pages: {len(data.get('pages', []))}")
+            print(f"   - Buttons: {len(data.get('buttons', []))}")
+            return True
+            
+        else:
+            print(f"   ❌ Failed with status code: {response.status_code}")
+            print(f"   Response: {response.text}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print(f"   ❌ Request failed: {e}")
+        return False
+
 def test_ssh_execute_endpoint():
     """Test POST /api/ssh/execute endpoint"""
     print("\n🔍 Testing POST /api/ssh/execute endpoint...")
