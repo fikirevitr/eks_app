@@ -100,13 +100,13 @@ def execute_ssh_command(ssh_config: SSHConfig) -> tuple[str, str, bool]:
             port=ssh_config.port,
             username=ssh_config.username,
             password=ssh_config.password,
-            timeout=10,
+            timeout=5,  # Reduced from 10 to 5 seconds
             look_for_keys=False,
             allow_agent=False
         )
         
         logger.info(f"Executing command: {ssh_config.command}")
-        stdin, stdout, stderr = ssh.exec_command(ssh_config.command, timeout=30)
+        stdin, stdout, stderr = ssh.exec_command(ssh_config.command, timeout=15)  # Reduced from 30 to 15
         
         stdout_str = stdout.read().decode('utf-8', errors='ignore')
         stderr_str = stderr.read().decode('utf-8', errors='ignore')
