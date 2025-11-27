@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 280,
-    height: 120,
+    width: 320,
+    height: 200,
   },
   footer: {
     paddingBottom: 40,
