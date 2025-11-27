@@ -246,11 +246,12 @@ export default function HomeScreen() {
 interface CommandButtonProps {
   button: Button;
   onPress: () => void;
-  isExecuting: boolean;
+  buttonStatus?: ButtonStatus;
 }
 
-function CommandButton({ button, onPress, isExecuting }: CommandButtonProps) {
+function CommandButton({ button, onPress, buttonStatus }: CommandButtonProps) {
   const scale = useSharedValue(1);
+  const isExecuting = buttonStatus?.status === 'executing';
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -264,6 +265,32 @@ function CommandButton({ button, onPress, isExecuting }: CommandButtonProps) {
       withSpring(1, { damping: 10 })
     );
     onPress();
+  };
+
+  const getBadgeColor = (status?: string) => {
+    switch (status) {
+      case 'executing':
+        return '#FFA500';
+      case 'success':
+        return '#4CAF50';
+      case 'error':
+        return '#F44336';
+      default:
+        return 'transparent';
+    }
+  };
+
+  const getBadgeText = (status?: string) => {
+    switch (status) {
+      case 'executing':
+        return 'Çalışıyor';
+      case 'success':
+        return 'Başarılı';
+      case 'error':
+        return 'Hata';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -280,11 +307,30 @@ function CommandButton({ button, onPress, isExecuting }: CommandButtonProps) {
       >
         <View style={styles.buttonIcon}>
           <Ionicons name={button.icon as any} size={24} color="#fff" />
+          {buttonStatus && buttonStatus.status !== 'idle' && (
+            <View style={[styles.statusBadge, { backgroundColor: getBadgeColor(buttonStatus.status) }]}>
+              {buttonStatus.status === 'executing' && (
+                <ActivityIndicator size="small" color="#fff" />
+              )}
+            </View>
+          )}
         </View>
         <View style={styles.buttonContent}>
-          <Text style={styles.buttonTitle}>{button.title}</Text>
+          <View style={styles.buttonTitleRow}>
+            <Text style={styles.buttonTitle}>{button.title}</Text>
+            {buttonStatus && buttonStatus.status !== 'idle' && (
+              <View style={[styles.textBadge, { backgroundColor: getBadgeColor(buttonStatus.status) }]}>
+                <Text style={styles.badgeText}>{getBadgeText(buttonStatus.status)}</Text>
+              </View>
+            )}
+          </View>
           {button.subtitle && (
             <Text style={styles.buttonSubtitle}>{button.subtitle}</Text>
+          )}
+          {buttonStatus && buttonStatus.message && (
+            <Text style={styles.statusMessage} numberOfLines={2}>
+              {buttonStatus.message}
+            </Text>
           )}
         </View>
         <View style={styles.buttonArrow}>
