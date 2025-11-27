@@ -116,13 +116,25 @@ def execute_ssh_command(ssh_config: SSHConfig) -> tuple[str, str, bool]:
         logger.info(f"Command executed. Exit status: {exit_status}")
         
     except paramiko.AuthenticationException:
-        stderr_str = "SSH Authentication failed. Check username/password."
+        stderr_str = "SSH kimlik doğrulama hatası. Kullanıcı adı/şifre kontrol edin."
         logger.error(stderr_str)
     except paramiko.SSHException as e:
-        stderr_str = f"SSH Error: {str(e)}"
+        error_msg = str(e).lower()
+        if 'timed out' in error_msg or 'timeout' in error_msg:
+            stderr_str = "Bağlantı zaman aşımına uğradı. Cihaz erişilebilir değil."
+        elif 'refused' in error_msg:
+            stderr_str = "Bağlantı reddedildi. SSH servisi çalışmıyor olabilir."
+        else:
+            stderr_str = f"SSH bağlantı hatası: {str(e)}"
         logger.error(stderr_str)
     except Exception as e:
-        stderr_str = f"Error: {str(e)}"
+        error_msg = str(e).lower()
+        if 'timed out' in error_msg or 'timeout' in error_msg:
+            stderr_str = "İşlem zaman aşımına uğradı. Cihaz yanıt vermiyor."
+        elif 'unreachable' in error_msg or 'no route' in error_msg:
+            stderr_str = "Cihaza erişilemiyor. Ağ bağlantısını kontrol edin."
+        else:
+            stderr_str = f"Hata: {str(e)}"
         logger.error(stderr_str)
     finally:
         ssh.close()
