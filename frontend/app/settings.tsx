@@ -94,7 +94,11 @@ export default function SettingsScreen() {
 
     setLoading(true);
     try {
-      const fullUrl = BASE_URL + currentFileName;
+      // Add .json extension if not present
+      const fileNameWithExtension = currentFileName.endsWith('.json') 
+        ? currentFileName 
+        : currentFileName + '.json';
+      const fullUrl = BASE_URL + fileNameWithExtension;
       const response = await axios.get(`${API_URL}/api/config/fetch`, {
         params: { url: fullUrl },
         timeout: 60000, // 60 seconds
