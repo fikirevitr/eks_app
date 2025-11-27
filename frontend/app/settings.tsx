@@ -92,7 +92,10 @@ export default function SettingsScreen() {
     setLoading(true);
     try {
       const fullUrl = BASE_URL + currentFileName;
-      const response = await axios.get(fullUrl);
+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
+        params: { url: fullUrl }
+      });
       const config = response.data;
 
       await storage.setItem('app_config', JSON.stringify(config));
