@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import { storage } from '../utils/storage';
 
 const API_URL = Constants.expoConfig?.extra?.EXPO_BACKEND_URL || 'https://pi-control.preview.emergentagent.com';
 
