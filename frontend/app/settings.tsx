@@ -198,7 +198,7 @@ export default function SettingsScreen() {
           <View style={styles.helpCard}>
             <Ionicons name="information-circle-outline" size={20} color="#007AFF" />
             <Text style={styles.helpText}>
-              Dosyayı değiştirdiğinizde yeni konfigürasyon indirilir ve eski veriler güncellenir.
+              "Yenile" butonu ile mevcut konfigürasyonu güncelleyebilir, "Temizle" butonu ile tüm verileri sıfırlayabilirsiniz.
             </Text>
           </View>
         </ScrollView>
