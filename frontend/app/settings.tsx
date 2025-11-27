@@ -212,38 +212,38 @@ export default function SettingsScreen() {
               </View>
             )}
 
-          {/* Action Buttons */}
-          <View style={styles.buttonGroup}>
+            {/* Action Buttons */}
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                style={[styles.button, styles.refreshButton, loading && styles.buttonDisabled]}
+                onPress={handleRefresh}
+                disabled={loading || !currentFileName}
+              >
+                <Ionicons name="refresh-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Mevcut Konfigürasyonu Yenile</Text>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              style={[styles.button, styles.refreshButton, loading && styles.buttonDisabled]}
-              onPress={handleRefresh}
-              disabled={loading || !currentFileName}
-            >
-              <Ionicons name="refresh-outline" size={20} color="#fff" />
-              <Text style={styles.buttonText}>Mevcut Konfigürasyonu Yenile</Text>
-            </TouchableOpacity>
-          </View>
+            {/* Danger Zone */}
+            <View style={styles.dangerZone}>
+              <Text style={styles.dangerTitle}>Tehlikeli Alan</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.dangerButton]}
+                onPress={handleClearData}
+                disabled={loading}
+              >
+                <Ionicons name="trash-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Tüm Verileri Temizle</Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Danger Zone */}
-          <View style={styles.dangerZone}>
-            <Text style={styles.dangerTitle}>Tehlikeli Alan</Text>
-            <TouchableOpacity
-              style={[styles.button, styles.dangerButton]}
-              onPress={handleClearData}
-              disabled={loading}
-            >
-              <Ionicons name="trash-outline" size={20} color="#fff" />
-              <Text style={styles.buttonText}>Tüm Verileri Temizle</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Info */}
-          <View style={styles.helpCard}>
-            <Ionicons name="information-circle-outline" size={20} color="#007AFF" />
-            <Text style={styles.helpText}>
-              "Yenile" butonu ile mevcut konfigürasyonu güncelleyebilir, "Temizle" butonu ile tüm verileri sıfırlayabilirsiniz.
-            </Text>
+            {/* Info */}
+            <View style={styles.helpCard}>
+              <Ionicons name="information-circle-outline" size={20} color="#007AFF" />
+              <Text style={styles.helpText}>
+                "Yenile" butonu ile mevcut konfigürasyonu güncelleyebilir, "Temizle" butonu ile tüm verileri sıfırlayabilirsiniz.
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
