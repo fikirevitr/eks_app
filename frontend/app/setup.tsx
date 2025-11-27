@@ -50,10 +50,13 @@ export default function SetupScreen() {
         throw new Error('Invalid configuration format');
       }
 
-      // Store config, file name, and full URL
+      // Store config, file name, full URL, and timestamps
+      const currentDate = new Date().toISOString();
       await storage.setItem('app_config', JSON.stringify(config));
       await storage.setItem('config_file_name', fileName.trim());
       await storage.setItem('config_url', fullUrl);
+      await storage.setItem('config_loaded_date', currentDate);
+      await storage.setItem('config_updated_date', currentDate);
 
       Alert.alert('Başarılı', 'Konfigürasyon yüklendi', [
         { text: 'Tamam', onPress: () => router.replace('/home') },
