@@ -190,7 +190,7 @@ export default function SettingsScreen() {
             <TouchableOpacity
               style={[styles.button, styles.refreshButton, loading && styles.buttonDisabled]}
               onPress={handleRefresh}
-              disabled={loading || !currentUrl}
+              disabled={loading || !currentFileName}
             >
               <Ionicons name="refresh-outline" size={20} color="#fff" />
               <Text style={styles.buttonText}>Mevcut Konfigürasyonu Yenile</Text>
