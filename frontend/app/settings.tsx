@@ -274,7 +274,7 @@ export default function SettingsScreen() {
           <View style={styles.helpCard}>
             <Ionicons name="information-circle-outline" size={20} color="#007AFF" />
             <Text style={styles.helpText}>
-              URL değiştirdiğinizde yeni konfigürasyon indirilir ve eski veriler güncellenir.
+              Dosyayı değiştirdiğinizde yeni konfigürasyon indirilir ve eski veriler güncellenir.
             </Text>
           </View>
         </ScrollView>
