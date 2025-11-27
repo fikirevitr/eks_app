@@ -54,13 +54,7 @@ export default function ExecuteScreen() {
     }
   }, [params.buttonData, router]);
 
-  useEffect(() => {
-    if (button) {
-      executeCommand();
-    }
-  }, [button]);
-
-  const executeCommand = async () => {
+  const executeCommand = useCallback(async () => {
     if (!button) return;
 
     setExecuting(true);
