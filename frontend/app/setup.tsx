@@ -73,14 +73,19 @@ export default function SetupScreen() {
           <Text style={styles.title}>Oniks EKS APP</Text>
           <Text style={styles.subtitle}>Konfigürasyon Kurulumu</Text>
 
+          <View style={styles.infoCard}>
+            <Text style={styles.infoLabel}>Ana Link:</Text>
+            <Text style={styles.infoValue}>{BASE_URL}</Text>
+          </View>
+
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>JSON Konfigürasyon URL</Text>
+            <Text style={styles.label}>Konfigürasyon Dosya Adı</Text>
             <TextInput
               style={styles.input}
-              placeholder="https://example.com/config.json"
+              placeholder="config.json"
               placeholderTextColor="#999"
-              value={jsonUrl}
-              onChangeText={setJsonUrl}
+              value={fileName}
+              onChangeText={setFileName}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!loading}
