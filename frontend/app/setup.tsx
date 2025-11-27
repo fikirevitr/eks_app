@@ -73,11 +73,6 @@ export default function SetupScreen() {
           <Text style={styles.title}>Oniks EKS APP</Text>
           <Text style={styles.subtitle}>Konfigürasyon Kurulumu</Text>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>Ana Link:</Text>
-            <Text style={styles.infoValue}>{BASE_URL}</Text>
-          </View>
-
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Konfigürasyon Dosya Adı</Text>
             <TextInput
