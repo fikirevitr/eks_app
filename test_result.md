@@ -177,3 +177,5 @@ agent_communication:
     message: "Completed comprehensive backend API testing for Oniks EKS APP. All 3 requested endpoints (GET /api/, GET /api/config/sample, POST /api/ssh/execute) are working correctly. Backend service is running properly on the configured URL and responding as expected."
   - agent: "main"
     message: "Settings screen UI simplified - removed filename editing capability. Only showing current config as read-only with refresh and clear options. Updated help text to reflect new functionality. Ready for backend testing."
+  - agent: "testing"
+    message: "Completed comprehensive backend API testing for all 4 requested endpoints. Updated backend_test.py to include missing GET /api/config/fetch endpoint. All endpoints working correctly: GET /api/ (root), GET /api/config/sample (sample config), GET /api/config/fetch (external config proxy with proper error handling), and POST /api/ssh/execute (SSH execution with invalid credentials test). Backend service is fully functional and responding as expected."
