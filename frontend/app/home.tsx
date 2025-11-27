@@ -234,7 +234,7 @@ function CommandButton({ button, onPress, isExecuting }: CommandButtonProps) {
         activeOpacity={0.8}
       >
         <View style={styles.buttonIcon}>
-          <Ionicons name={button.icon as any} size={28} color="#fff" />
+          <Ionicons name={button.icon as any} size={24} color="#fff" />
         </View>
         <View style={styles.buttonContent}>
           <Text style={styles.buttonTitle}>{button.title}</Text>
