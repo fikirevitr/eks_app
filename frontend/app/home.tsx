@@ -58,16 +58,33 @@ interface AppConfig {
   buttons: Button[];
 }
 
+interface ButtonStatus {
+  status: 'idle' | 'executing' | 'success' | 'error';
+  timestamp: string;
+  message: string;
+}
+
 export default function HomeScreen() {
   const router = useRouter();
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPage, setSelectedPage] = useState<string>('');
-  const [executingButton, setExecutingButton] = useState<string | null>(null);
+  const [buttonStatuses, setButtonStatuses] = useState<Record<string, ButtonStatus>>({});
 
   useEffect(() => {
     loadConfig();
   }, []);
+
+  useEffect(() => {
+    // Reload button statuses every 2 seconds
+    const interval = setInterval(() => {
+      if (config) {
+        loadButtonStatuses();
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [config]);
 
   const loadConfig = async () => {
     try {
