@@ -271,6 +271,28 @@ async def get_simple_config():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading simple config: {str(e)}")
 
+@api_router.get("/config/fetch")
+async def fetch_external_config(url: str):
+    """Fetch configuration JSON from external URL (proxy to avoid CORS)"""
+    import httpx
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            config_data = response.json()
+            
+            # Validate basic structure
+            if not config_data.get('app_name') or not config_data.get('pages') or not config_data.get('buttons'):
+                raise ValueError('Invalid configuration format')
+            
+            return config_data
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=f"Failed to fetch config: {str(e)}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading config: {str(e)}")
+
 # Include router
 app.include_router(api_router)
 
