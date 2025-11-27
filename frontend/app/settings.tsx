@@ -141,25 +141,29 @@ export default function SettingsScreen() {
             <View style={{ width: 40 }} />
           </View>
 
-          {/* Current URL Info */}
-          {currentUrl && (
+          {/* Base URL Info */}
+          <View style={styles.infoCard}>
+            <Text style={styles.infoLabel}>Ana Link:</Text>
+            <Text style={styles.infoValue}>{BASE_URL}</Text>
+          </View>
+
+          {/* Current File Name Info */}
+          {currentFileName && (
             <View style={styles.infoCard}>
-              <Text style={styles.infoLabel}>Mevcut Konfigürasyon URL:</Text>
-              <Text style={styles.infoValue} numberOfLines={2}>
-                {currentUrl}
-              </Text>
+              <Text style={styles.infoLabel}>Mevcut Dosya:</Text>
+              <Text style={styles.infoValue}>{currentFileName}</Text>
             </View>
           )}
 
-          {/* URL Input */}
+          {/* File Name Input */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>JSON Konfigürasyon URL</Text>
+            <Text style={styles.sectionTitle}>Konfigürasyon Dosya Adı</Text>
             <TextInput
               style={styles.input}
-              placeholder="https://example.com/config.json"
+              placeholder="config.json"
               placeholderTextColor="#999"
-              value={jsonUrl}
-              onChangeText={setJsonUrl}
+              value={fileName}
+              onChangeText={setFileName}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!loading}
