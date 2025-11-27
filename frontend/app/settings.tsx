@@ -63,7 +63,8 @@ export default function SettingsScreen() {
 
       // Update storage
       await storage.setItem('app_config', JSON.stringify(config));
-      await storage.setItem('config_url', jsonUrl);
+      await storage.setItem('config_file_name', fileName.trim());
+      await storage.setItem('config_url', fullUrl);
 
       Alert.alert('Başarılı', 'Konfigürasyon güncellendi', [
         { text: 'Tamam', onPress: () => router.back() },
