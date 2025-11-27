@@ -11,6 +11,13 @@ export default function Index() {
   useEffect(() => {
     // Show splash and check config
     const init = async () => {
+      // Clear all button statuses on app start
+      try {
+        await clearButtonStatuses();
+      } catch (error) {
+        console.error('Error clearing button statuses:', error);
+      }
+      
       // Wait 3 seconds for splash
       await new Promise(resolve => setTimeout(resolve, 3000));
       
@@ -28,6 +35,24 @@ export default function Index() {
 
     init();
   }, []);
+
+  const clearButtonStatuses = async () => {
+    try {
+      // Get all keys from storage
+      const allKeys = await storage.getAllKeys();
+      
+      // Filter and remove all button_status keys
+      const statusKeys = allKeys.filter(key => key.startsWith('button_status_'));
+      
+      for (const key of statusKeys) {
+        await storage.removeItem(key);
+      }
+      
+      console.log(`Cleared ${statusKeys.length} button statuses`);
+    } catch (error) {
+      console.error('Error clearing button statuses:', error);
+    }
+  };
 
   // Show splash screen
   if (showSplash) {
