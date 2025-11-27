@@ -10,6 +10,7 @@ export default function RootLayout() {
           animation: 'slide_from_right',
         }}
       >
+        <Stack.Screen name="splash" options={{ animation: 'fade' }} />
         <Stack.Screen name="index" />
         <Stack.Screen name="setup" />
         <Stack.Screen name="home" />
