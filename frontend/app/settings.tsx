@@ -116,26 +116,38 @@ export default function SettingsScreen() {
   const handleClearData = async () => {
     // Use platform-specific confirmation
     if (Platform.OS === 'web') {
-      const confirmed = window.confirm(
-        'Tüm Verileri Temizle\n\nTüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?'
-      );
-      
-      if (confirmed) {
-        try {
-          // Clear all storage
-          await storage.clear();
+      try {
+        // For web, use direct confirm
+        if (typeof window !== 'undefined' && window.confirm) {
+          const confirmed = window.confirm(
+            'Tüm Verileri Temizle\n\nTüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?'
+          );
           
-          // Clear state
-          setCurrentFileName('');
-          setFileName('');
-          
-          // Show success message
+          if (!confirmed) {
+            return; // User cancelled
+          }
+        } else {
+          // Fallback if window.confirm not available
+          console.log('Clearing data...');
+        }
+        
+        // Clear all storage
+        await storage.clear();
+        
+        // Clear state
+        setCurrentFileName('');
+        setFileName('');
+        
+        // Show success message
+        if (typeof window !== 'undefined' && window.alert) {
           window.alert('Başarılı! Tüm veriler temizlendi.');
-          
-          // Redirect to setup
-          router.replace('/setup');
-        } catch (error) {
-          console.error('Error clearing data:', error);
+        }
+        
+        // Redirect to setup
+        router.replace('/setup');
+      } catch (error) {
+        console.error('Error clearing data:', error);
+        if (typeof window !== 'undefined' && window.alert) {
           window.alert('Hata: Veriler temizlenirken bir hata oluştu');
         }
       }
