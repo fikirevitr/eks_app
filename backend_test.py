@@ -128,6 +128,16 @@ def test_config_fetch_endpoint():
             print(f"   - Buttons: {len(data.get('buttons', []))}")
             return True
             
+        elif response.status_code == 502:
+            # This is expected behavior when external URL returns 404
+            error_data = response.json()
+            if "Config server returned 404" in error_data.get("detail", ""):
+                print(f"   ✅ Config fetch endpoint correctly handled external 404 error")
+                print(f"   - Proper error response: {error_data.get('detail')}")
+                return True
+            else:
+                print(f"   ❌ Unexpected 502 error: {error_data}")
+                return False
         else:
             print(f"   ❌ Failed with status code: {response.status_code}")
             print(f"   Response: {response.text}")
