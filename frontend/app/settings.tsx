@@ -163,42 +163,13 @@ export default function SettingsScreen() {
           {/* Current File Name Info */}
           {currentFileName && (
             <View style={styles.infoCard}>
-              <Text style={styles.infoLabel}>Mevcut Dosya:</Text>
+              <Text style={styles.infoLabel}>Mevcut Konfigürasyon Dosyası:</Text>
               <Text style={styles.infoValue}>{currentFileName}</Text>
             </View>
           )}
 
-          {/* File Name Input */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Konfigürasyon Dosya Adı</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="config (uzantısız)"
-              placeholderTextColor="#999"
-              value={fileName}
-              onChangeText={setFileName}
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!loading}
-            />
-          </View>
-
           {/* Action Buttons */}
           <View style={styles.buttonGroup}>
-            <TouchableOpacity
-              style={[styles.button, styles.updateButton, loading && styles.buttonDisabled]}
-              onPress={handleUpdate}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <>
-                  <Ionicons name="cloud-download-outline" size={20} color="#fff" />
-                  <Text style={styles.buttonText}>Güncelle</Text>
-                </>
-              )}
-            </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.button, styles.refreshButton, loading && styles.buttonDisabled]}
