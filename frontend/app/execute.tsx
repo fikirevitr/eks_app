@@ -120,7 +120,8 @@ export default function ExecuteScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <StatusBar barStyle="light-content" backgroundColor={button.color} />
       {/* Header */}
       <View style={[styles.header, { backgroundColor: button.color }]}>
         <TouchableOpacity onPress={handleClose} style={styles.backButton}>
