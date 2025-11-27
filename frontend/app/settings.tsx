@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { StatusBar } from 'react-native';
 
-const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
+const API_URL = 'https://pi-control.preview.emergentagent.com';
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SettingsScreen() {

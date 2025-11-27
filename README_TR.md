@@ -123,7 +123,7 @@ Uygulamanız için aşağıdaki formatta bir JSON dosyası oluşturun:
 
 Test için örnek konfig ürasyon:
 ```
-https://remote-pi-commander.preview.emergentagent.com/api/config/sample
+https://pi-control.preview.emergentagent.com/api/config/sample
 ```
 
 ## API Endpoints
