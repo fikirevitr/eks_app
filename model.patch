@@ -1,113 +1,171 @@
+diff --git a/frontend/app/setup.tsx b/frontend/app/setup.tsx
+index c22228f..4ca18bc 100644
+--- a/frontend/app/setup.tsx
++++ b/frontend/app/setup.tsx
+@@ -195,24 +195,37 @@ const styles = StyleSheet.create({
+     fontSize: 18,
+     fontWeight: '600',
+   },
+-  infoContainer: {
+-    backgroundColor: '#fff',
++  infoBox: {
++    flexDirection: 'row',
++    backgroundColor: '#e3f2ff',
+     borderRadius: 12,
+     padding: 16,
++    marginTop: 24,
+     borderWidth: 1,
+-    borderColor: '#ddd',
++    borderColor: '#b3d9ff',
++  },
++  infoIcon: {
++    marginTop: 2,
++  },
++  infoContent: {
++    flex: 1,
++    marginLeft: 12,
+   },
+   infoText: {
+     fontSize: 14,
+-    color: '#666',
++    color: '#333',
++    lineHeight: 20,
+     marginBottom: 8,
+   },
+-  infoCode: {
+-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+-    fontSize: 12,
+-    color: '#333',
+-    backgroundColor: '#f9f9f9',
+-    padding: 12,
+-    borderRadius: 8,
++  linkText: {
++    color: '#007AFF',
++    fontWeight: '600',
++    textDecorationLine: 'underline',
++  },
++  emailText: {
++    fontSize: 14,
++    color: '#007AFF',
++    fontWeight: '500',
++    textDecorationLine: 'underline',
+   },
+ });
 diff --git a/model.patch b/model.patch
-index 0432805..e69de29 100644
+index 03d6bef..e69de29 100644
 --- a/model.patch
 +++ b/model.patch
-@@ -1,108 +0,0 @@
--diff --git a/frontend/app/settings.tsx b/frontend/app/settings.tsx
--index 306e7a7..6a88e42 100644
----- a/frontend/app/settings.tsx
--+++ b/frontend/app/settings.tsx
--@@ -52,8 +52,11 @@ export default function SettingsScreen() {
--       // Construct full URL
--       const fullUrl = BASE_URL + fileName.trim();
--       
---      // Fetch new config
---      const response = await axios.get(fullUrl);
--+      // Fetch new config through backend proxy
--+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
--+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
--+        params: { url: fullUrl }
--+      });
--       const config = response.data;
-- 
--       // Validate
--@@ -89,7 +92,10 @@ export default function SettingsScreen() {
--     setLoading(true);
--     try {
--       const fullUrl = BASE_URL + currentFileName;
---      const response = await axios.get(fullUrl);
--+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
--+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
--+        params: { url: fullUrl }
--+      });
--       const config = response.data;
-- 
--       await storage.setItem('app_config', JSON.stringify(config));
+@@ -1,113 +0,0 @@
 -diff --git a/model.patch b/model.patch
--index 9965b8a..e69de29 100644
+-index 0432805..e69de29 100644
 ---- a/model.patch
 -+++ b/model.patch
--@@ -1,73 +0,0 @@
---diff --git a/test_result.md b/test_result.md
---index 187cba4..b040452 100644
------ a/test_result.md
---+++ b/test_result.md
---@@ -100,4 +100,65 @@
+-@@ -1,108 +0,0 @@
+--diff --git a/frontend/app/settings.tsx b/frontend/app/settings.tsx
+--index 306e7a7..6a88e42 100644
+----- a/frontend/app/settings.tsx
+--+++ b/frontend/app/settings.tsx
+--@@ -52,8 +52,11 @@ export default function SettingsScreen() {
+--       // Construct full URL
+--       const fullUrl = BASE_URL + fileName.trim();
+--       
+---      // Fetch new config
+---      const response = await axios.get(fullUrl);
+--+      // Fetch new config through backend proxy
+--+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
+--+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
+--+        params: { url: fullUrl }
+--+      });
+--       const config = response.data;
 -- 
--- #====================================================================================================
--- # Testing Data - Main Agent and testing sub agent both should log testing data below this section
----#====================================================================================================
---\ No newline at end of file
---+#====================================================================================================
---+
---+user_problem_statement: "Test the Oniks EKS APP backend API endpoints"
---+
---+backend:
---+  - task: "Root API endpoint"
---+    implemented: true
---+    working: true
---+    file: "backend/server.py"
---+    stuck_count: 0
---+    priority: "high"
---+    needs_retesting: false
---+    status_history:
---+      - working: true
---+        agent: "testing"
---+        comment: "GET /api/ endpoint tested successfully. Returns correct message 'Oniks EKS APP Backend' and version '1.0' as expected."
---+
---+  - task: "Config sample endpoint"
---+    implemented: true
---+    working: true
---+    file: "backend/server.py"
---+    stuck_count: 0
---+    priority: "high"
---+    needs_retesting: false
---+    status_history:
---+      - working: true
---+        agent: "testing"
---+        comment: "GET /api/config/sample endpoint tested successfully. Returns full JSON configuration with app_name 'Oniks EKS APP', 3 pages, and 10 buttons as expected."
---+
---+  - task: "SSH execute endpoint"
---+    implemented: true
---+    working: true
---+    file: "backend/server.py"
---+    stuck_count: 0
---+    priority: "high"
---+    needs_retesting: false
---+    status_history:
---+      - working: true
---+        agent: "testing"
---+        comment: "POST /api/ssh/execute endpoint tested successfully. Correctly handles invalid host with proper error response structure including success, output, error, and execution_time fields."
---+
---+frontend:
---+  # No frontend testing requested
---+
---+metadata:
---+  created_by: "testing_agent"
---+  version: "1.0"
---+  test_sequence: 1
---+  run_ui: false
---+
---+test_plan:
---+  current_focus:
---+    - "Root API endpoint"
---+    - "Config sample endpoint"
---+    - "SSH execute endpoint"
---+  stuck_tasks: []
---+  test_all: false
---+  test_priority: "high_first"
---+
---+agent_communication:
---+  - agent: "testing"
---+    message: "Completed comprehensive backend API testing for Oniks EKS APP. All 3 requested endpoints (GET /api/, GET /api/config/sample, POST /api/ssh/execute) are working correctly. Backend service is running properly on the configured URL and responding as expected."
---\ No newline at end of file
+--       // Validate
+--@@ -89,7 +92,10 @@ export default function SettingsScreen() {
+--     setLoading(true);
+--     try {
+--       const fullUrl = BASE_URL + currentFileName;
+---      const response = await axios.get(fullUrl);
+--+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
+--+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
+--+        params: { url: fullUrl }
+--+      });
+--       const config = response.data;
+-- 
+--       await storage.setItem('app_config', JSON.stringify(config));
+--diff --git a/model.patch b/model.patch
+--index 9965b8a..e69de29 100644
+----- a/model.patch
+--+++ b/model.patch
+--@@ -1,73 +0,0 @@
+---diff --git a/test_result.md b/test_result.md
+---index 187cba4..b040452 100644
+------ a/test_result.md
+---+++ b/test_result.md
+---@@ -100,4 +100,65 @@
+--- 
+--- #====================================================================================================
+--- # Testing Data - Main Agent and testing sub agent both should log testing data below this section
+----#====================================================================================================
+---\ No newline at end of file
+---+#====================================================================================================
+---+
+---+user_problem_statement: "Test the Oniks EKS APP backend API endpoints"
+---+
+---+backend:
+---+  - task: "Root API endpoint"
+---+    implemented: true
+---+    working: true
+---+    file: "backend/server.py"
+---+    stuck_count: 0
+---+    priority: "high"
+---+    needs_retesting: false
+---+    status_history:
+---+      - working: true
+---+        agent: "testing"
+---+        comment: "GET /api/ endpoint tested successfully. Returns correct message 'Oniks EKS APP Backend' and version '1.0' as expected."
+---+
+---+  - task: "Config sample endpoint"
+---+    implemented: true
+---+    working: true
+---+    file: "backend/server.py"
+---+    stuck_count: 0
+---+    priority: "high"
+---+    needs_retesting: false
+---+    status_history:
+---+      - working: true
+---+        agent: "testing"
+---+        comment: "GET /api/config/sample endpoint tested successfully. Returns full JSON configuration with app_name 'Oniks EKS APP', 3 pages, and 10 buttons as expected."
+---+
+---+  - task: "SSH execute endpoint"
+---+    implemented: true
+---+    working: true
+---+    file: "backend/server.py"
+---+    stuck_count: 0
+---+    priority: "high"
+---+    needs_retesting: false
+---+    status_history:
+---+      - working: true
+---+        agent: "testing"
+---+        comment: "POST /api/ssh/execute endpoint tested successfully. Correctly handles invalid host with proper error response structure including success, output, error, and execution_time fields."
+---+
+---+frontend:
+---+  # No frontend testing requested
+---+
+---+metadata:
+---+  created_by: "testing_agent"
+---+  version: "1.0"
+---+  test_sequence: 1
+---+  run_ui: false
+---+
+---+test_plan:
+---+  current_focus:
+---+    - "Root API endpoint"
+---+    - "Config sample endpoint"
+---+    - "SSH execute endpoint"
+---+  stuck_tasks: []
+---+  test_all: false
+---+  test_priority: "high_first"
+---+
+---+agent_communication:
+---+  - agent: "testing"
+---+    message: "Completed comprehensive backend API testing for Oniks EKS APP. All 3 requested endpoints (GET /api/, GET /api/config/sample, POST /api/ssh/execute) are working correctly. Backend service is running properly on the configured URL and responding as expected."
+---\ No newline at end of file
