@@ -75,42 +75,42 @@ export default function ExecuteScreen() {
     try {
       setStatus('executing');
       
-      const response = await axios.post(
-        `${API_URL}/api/ssh/execute`,
+      // Execute SSH command directly
+      const result = await executeSSHCommand(
         {
-          button_id: button.id,
-          ssh: button.ssh,
+          host: button.ssh.host,
+          port: button.ssh.port,
+          username: button.ssh.username,
+          password: button.ssh.password,
         },
-        {
-          timeout: 60000, // 60 seconds timeout
-        }
+        button.ssh.command
       );
 
-      if (response.data.success) {
+      if (result.success) {
         setStatus('success');
-        setOutput(response.data.output || 'Komut başarıyla çalıştırıldı');
+        setOutput(result.output || 'Komut başarıyla çalıştırıldı');
         
         // Save success status
         await storage.setItem(`button_status_${button.id}`, JSON.stringify({
           status: 'success',
           timestamp: new Date().toISOString(),
-          message: response.data.output || 'Başarılı',
+          message: result.output || 'Başarılı',
         }));
       } else {
         setStatus('error');
-        setError(response.data.error || 'Komut çalıştırılamadı');
+        setError(result.error || 'Komut çalıştırılamadı');
         
         // Save error status
         await storage.setItem(`button_status_${button.id}`, JSON.stringify({
           status: 'error',
           timestamp: new Date().toISOString(),
-          message: response.data.error || 'Hata',
+          message: result.error || 'Hata',
         }));
       }
     } catch (err: any) {
       console.error('Error executing command:', err);
       setStatus('error');
-      const errorMsg = err.response?.data?.detail || err.message || 'SSH komut çalıştırma hatası';
+      const errorMsg = err.message || 'SSH komut çalıştırma hatası';
       setError(errorMsg);
       
       // Save error status
