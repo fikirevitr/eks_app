@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "EXPO_BACKEND_URL": "https://pi-control.preview.emergentagent.com"
+      "EXPO_BACKEND_URL": "https://pi-control.preview.emergentagent.com",
+      "router": {},
+      "eas": {
+        "projectId": "12345678-1234-1234-1234-123456789abc"
+      }
     },
     "ios": {
       "supportsTablet": true
