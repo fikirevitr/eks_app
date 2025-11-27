@@ -260,7 +260,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     padding: 16,
+  },
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
   },
   header: {
     flexDirection: 'row',
