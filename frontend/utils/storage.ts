@@ -33,6 +33,21 @@ class StorageAdapter {
     }
     return AsyncStorage.clear();
   }
+
+  async getAllKeys(): Promise<string[]> {
+    if (Platform.OS === 'web') {
+      // Get all keys from localStorage
+      const keys: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) {
+          keys.push(key);
+        }
+      }
+      return keys;
+    }
+    return AsyncStorage.getAllKeys();
+  }
 }
 
 export const storage = new StorageAdapter();
