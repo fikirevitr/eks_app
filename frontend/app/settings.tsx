@@ -141,12 +141,6 @@ export default function SettingsScreen() {
             <View style={{ width: 40 }} />
           </View>
 
-          {/* Base URL Info */}
-          <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>Ana Link:</Text>
-            <Text style={styles.infoValue}>{BASE_URL}</Text>
-          </View>
-
           {/* Current File Name Info */}
           {currentFileName && (
             <View style={styles.infoCard}>
