@@ -52,7 +52,7 @@ export default function ExecuteScreen() {
         router.back();
       }
     }
-  }, [params]);
+  }, [params.buttonData, router]);
 
   useEffect(() => {
     if (button) {
