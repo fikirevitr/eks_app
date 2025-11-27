@@ -100,6 +100,9 @@ export default function HomeScreen() {
         
         setConfig(parsedConfig);
         setSelectedPage(parsedConfig.pages[0]?.pageId || '');
+        
+        // Load button statuses
+        loadButtonStatuses(parsedConfig.buttons);
       } else {
         router.replace('/setup');
       }
@@ -108,6 +111,24 @@ export default function HomeScreen() {
       Alert.alert('Hata', 'Konfigürasyon yüklenemedi');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadButtonStatuses = async (buttons?: Button[]) => {
+    try {
+      const buttonsToCheck = buttons || config?.buttons || [];
+      const statuses: Record<string, ButtonStatus> = {};
+
+      for (const button of buttonsToCheck) {
+        const statusStr = await storage.getItem(`button_status_${button.id}`);
+        if (statusStr) {
+          statuses[button.id] = JSON.parse(statusStr);
+        }
+      }
+
+      setButtonStatuses(statuses);
+    } catch (error) {
+      console.error('Error loading button statuses:', error);
     }
   };
 
