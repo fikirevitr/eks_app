@@ -10,6 +10,7 @@ import {
   Dimensions,
   Platform,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { storage } from '../utils/storage';
