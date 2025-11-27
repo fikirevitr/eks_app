@@ -195,24 +195,37 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  infoContainer: {
-    backgroundColor: '#fff',
+  infoBox: {
+    flexDirection: 'row',
+    backgroundColor: '#e3f2ff',
     borderRadius: 12,
     padding: 16,
+    marginTop: 24,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#b3d9ff',
+  },
+  infoIcon: {
+    marginTop: 2,
+  },
+  infoContent: {
+    flex: 1,
+    marginLeft: 12,
   },
   infoText: {
     fontSize: 14,
-    color: '#666',
+    color: '#333',
+    lineHeight: 20,
     marginBottom: 8,
   },
-  infoCode: {
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    fontSize: 12,
-    color: '#333',
-    backgroundColor: '#f9f9f9',
-    padding: 12,
-    borderRadius: 8,
+  linkText: {
+    color: '#007AFF',
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  emailText: {
+    fontSize: 14,
+    color: '#007AFF',
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
 });
