@@ -127,7 +127,6 @@ export default function SettingsScreen() {
                 
                 // Clear state
                 setCurrentFileName('');
-                setFileName('');
                 
                 // Show success message and redirect
                 Alert.alert('Başarılı', 'Tüm veriler temizlendi', [
