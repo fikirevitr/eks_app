@@ -14,9 +14,8 @@ import {
 import { useRouter } from 'expo-router';
 import { storage } from '../utils/storage';
 import axios from 'axios';
-import Constants from 'expo-constants';
 
-const API_URL = Constants.expoConfig?.extra?.EXPO_BACKEND_URL || 'https://remote-pi-commander.preview.emergentagent.com';
+const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SetupScreen() {
