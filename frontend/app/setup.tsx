@@ -44,9 +44,10 @@ export default function SetupScreen() {
         throw new Error('Invalid configuration format');
       }
 
-      // Store config and URL
+      // Store config, file name, and full URL
       await storage.setItem('app_config', JSON.stringify(config));
-      await storage.setItem('config_url', jsonUrl);
+      await storage.setItem('config_file_name', fileName.trim());
+      await storage.setItem('config_url', fullUrl);
 
       Alert.alert('Başarılı', 'Konfigürasyon yüklendi', [
         { text: 'Tamam', onPress: () => router.replace('/home') },
