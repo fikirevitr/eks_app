@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "extra": {
       "EXPO_BACKEND_URL": "https://pi-control.preview.emergentagent.com",
-      "router": {}
+      "router": {},
+      "eas": {
+        "projectId": "ff30de98-0030-4bd5-823a-6f363a7f412e"
+      }
     },
     "ios": {
       "supportsTablet": true
