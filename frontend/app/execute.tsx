@@ -120,21 +120,23 @@ export default function ExecuteScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={button.color} />
-      {/* Header */}
-      <View style={[styles.header, { backgroundColor: button.color }]}>
-        <TouchableOpacity onPress={handleClose} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Ionicons name={button.icon as any} size={32} color="#fff" />
-          <Text style={styles.headerTitle}>{button.title}</Text>
-          {button.subtitle && (
-            <Text style={styles.headerSubtitle}>{button.subtitle}</Text>
-          )}
+      {/* Header with SafeArea */}
+      <SafeAreaView style={[styles.headerSafeArea, { backgroundColor: button.color }]} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={handleClose} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Ionicons name={button.icon as any} size={32} color="#fff" />
+            <Text style={styles.headerTitle}>{button.title}</Text>
+            {button.subtitle && (
+              <Text style={styles.headerSubtitle}>{button.subtitle}</Text>
+            )}
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
 
       {/* Status Badge */}
       <View style={styles.statusContainer}>
