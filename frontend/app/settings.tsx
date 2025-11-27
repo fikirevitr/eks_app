@@ -52,8 +52,11 @@ export default function SettingsScreen() {
       // Construct full URL
       const fullUrl = BASE_URL + fileName.trim();
       
-      // Fetch new config
-      const response = await axios.get(fullUrl);
+      // Fetch new config through backend proxy
+      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
+        params: { url: fullUrl }
+      });
       const config = response.data;
 
       // Validate
