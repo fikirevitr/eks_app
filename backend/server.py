@@ -139,7 +139,11 @@ async def execute_ssh(request: SSHExecuteRequest):
     start_time = datetime.utcnow()
     
     try:
-        stdout, stderr, success = execute_ssh_command(request.ssh)
+        # Run SSH in thread pool to avoid blocking event loop
+        loop = asyncio.get_event_loop()
+        stdout, stderr, success = await loop.run_in_executor(
+            None, execute_ssh_command, request.ssh
+        )
         
         execution_time = (datetime.utcnow() - start_time).total_seconds()
         
