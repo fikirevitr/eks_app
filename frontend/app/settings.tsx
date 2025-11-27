@@ -96,7 +96,6 @@ export default function SettingsScreen() {
         
         // Clear state
         setCurrentFileName('');
-        setFileName('');
         
         // Show success message
         if (typeof window !== 'undefined' && window.alert) {
