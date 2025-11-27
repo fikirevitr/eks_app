@@ -208,6 +208,7 @@ def main():
     # Test all endpoints
     results.append(("GET /api/", test_root_endpoint()))
     results.append(("GET /api/config/sample", test_config_sample_endpoint()))
+    results.append(("GET /api/config/fetch", test_config_fetch_endpoint()))
     results.append(("POST /api/ssh/execute", test_ssh_execute_endpoint()))
     
     # Summary
