@@ -141,6 +141,18 @@ backend:
         agent: "testing"
         comment: "POST /api/ssh/execute endpoint tested successfully. Correctly handles invalid host with proper error response structure including success, output, error, and execution_time fields."
 
+  - task: "Config fetch endpoint"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "GET /api/config/fetch endpoint tested successfully. Correctly handles external URL proxy functionality with proper error handling for 404 responses from external config servers. Returns appropriate 502 status with detailed error message when external URL is not found."
+
 frontend:
   # No frontend testing requested
 
