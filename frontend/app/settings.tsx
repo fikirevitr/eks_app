@@ -83,7 +83,11 @@ export default function SettingsScreen() {
       });
       const config = response.data;
 
+      // Update config and update date
+      const currentDate = new Date().toISOString();
       await storage.setItem('app_config', JSON.stringify(config));
+      await storage.setItem('config_updated_date', currentDate);
+      setUpdatedDate(currentDate);
 
       Alert.alert('Başarılı', 'Konfigürasyon yenilendi', [
         { text: 'Tamam', onPress: () => router.back() },
