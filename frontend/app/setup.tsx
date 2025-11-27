@@ -87,7 +87,7 @@ export default function SetupScreen() {
             <Text style={styles.label}>Konfigürasyon Dosya Adı</Text>
             <TextInput
               style={styles.input}
-              placeholder="config.json"
+              placeholder="config (uzantısız)"
               placeholderTextColor="#999"
               value={fileName}
               onChangeText={setFileName}
