@@ -135,14 +135,11 @@ export default function HomeScreen() {
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image 
-            source={require('../assets/images/eks_logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.headerTitle}>APP</Text>
-        </View>
+        <Image 
+          source={require('../assets/images/eks_logo.png')}
+          style={styles.headerLogo}
+          resizeMode="contain"
+        />
         <TouchableOpacity onPress={goToSettings} style={styles.settingsButton}>
           <Ionicons name="settings-outline" size={24} color="#007AFF" />
         </TouchableOpacity>
