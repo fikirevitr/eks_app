@@ -81,14 +81,15 @@ export default function SettingsScreen() {
   };
 
   const handleRefresh = async () => {
-    if (!currentUrl) {
-      Alert.alert('Hata', 'Mevcut konfigürasyon URL bulunamadı');
+    if (!currentFileName) {
+      Alert.alert('Hata', 'Mevcut konfigürasyon dosyası bulunamadı');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await axios.get(currentUrl);
+      const fullUrl = BASE_URL + currentFileName;
+      const response = await axios.get(fullUrl);
       const config = response.data;
 
       await storage.setItem('app_config', JSON.stringify(config));
