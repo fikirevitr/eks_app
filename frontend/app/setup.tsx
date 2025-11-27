@@ -31,12 +31,14 @@ export default function SetupScreen() {
     }
 
     setLoading(true);
-    try {
+    try:
       // Construct full URL
       const fullUrl = BASE_URL + fileName.trim();
       
-      // Fetch JSON from URL
-      const response = await axios.get(fullUrl);
+      // Fetch JSON through backend proxy to avoid CORS issues
+      const response = await axios.get(`${API_URL}/api/config/fetch`, {
+        params: { url: fullUrl }
+      });
       const config = response.data;
 
       // Validate config structure
