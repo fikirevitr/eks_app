@@ -125,12 +125,13 @@ const styles = StyleSheet.create({
   content: {
     padding: 24,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    textAlign: 'center',
-    marginBottom: 8,
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  logo: {
+    width: 200,
+    height: 60,
   },
   subtitle: {
     fontSize: 16,
