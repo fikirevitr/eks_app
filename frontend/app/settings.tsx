@@ -25,6 +25,8 @@ export default function SettingsScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [currentFileName, setCurrentFileName] = useState('');
+  const [loadedDate, setLoadedDate] = useState('');
+  const [updatedDate, setUpdatedDate] = useState('');
 
   useEffect(() => {
     loadCurrentUrl();
@@ -33,12 +35,33 @@ export default function SettingsScreen() {
   const loadCurrentUrl = async () => {
     try {
       const savedFileName = await storage.getItem('config_file_name');
+      const savedLoadedDate = await storage.getItem('config_loaded_date');
+      const savedUpdatedDate = await storage.getItem('config_updated_date');
+      
       if (savedFileName) {
         setCurrentFileName(savedFileName);
+      }
+      if (savedLoadedDate) {
+        setLoadedDate(savedLoadedDate);
+      }
+      if (savedUpdatedDate) {
+        setUpdatedDate(savedUpdatedDate);
       }
     } catch (error) {
       console.error('Error loading file name:', error);
     }
+  };
+
+  const formatDate = (isoDate: string) => {
+    if (!isoDate) return '';
+    const date = new Date(isoDate);
+    return date.toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   const handleRefresh = async () => {
