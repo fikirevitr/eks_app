@@ -36,7 +36,8 @@ export default function SetupScreen() {
       
       // Fetch JSON through backend proxy to avoid CORS issues
       const response = await axios.get(`${API_URL}/api/config/fetch`, {
-        params: { url: fullUrl }
+        params: { url: fullUrl },
+        timeout: 60000, // 60 seconds
       });
       const config = response.data;
 
