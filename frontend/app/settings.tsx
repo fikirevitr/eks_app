@@ -115,18 +115,30 @@ export default function SettingsScreen() {
 
   const handleClearData = () => {
     Alert.alert(
-      'Veri Temizle',
-      'Tüm uygulama verileri silinecek. Emin misiniz?',
+      'Tüm Verileri Temizle',
+      'Tüm uygulama verileri (konfigürasyon dosyası ve ayarlar) silinecek. Emin misiniz?',
       [
         { text: 'İptal', style: 'cancel' },
         {
-          text: 'Sil',
+          text: 'Evet, Temizle',
           style: 'destructive',
           onPress: async () => {
-            await storage.clear();
-            Alert.alert('Başarılı', 'Veriler temizlendi', [
-              { text: 'Tamam', onPress: () => router.replace('/setup') },
-            ]);
+            try {
+              // Clear all storage
+              await storage.clear();
+              
+              // Clear state
+              setCurrentFileName('');
+              setFileName('');
+              
+              // Show success message and redirect
+              Alert.alert('Başarılı', 'Tüm veriler temizlendi', [
+                { text: 'Tamam', onPress: () => router.replace('/setup') },
+              ]);
+            } catch (error) {
+              console.error('Error clearing data:', error);
+              Alert.alert('Hata', 'Veriler temizlenirken bir hata oluştu');
+            }
           },
         },
       ]
