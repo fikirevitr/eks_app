@@ -397,6 +397,9 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 16,
   },
+  actionButtonsSafeArea: {
+    backgroundColor: '#f5f5f5',
+  },
   actionButtons: {
     flexDirection: 'row',
     padding: 16,
