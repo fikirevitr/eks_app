@@ -93,7 +93,6 @@ export default function SettingsScreen() {
     setLoading(true);
     try {
       const fullUrl = BASE_URL + currentFileName;
-      const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
       const response = await axios.get(`${API_URL}/api/config/fetch`, {
         params: { url: fullUrl },
         timeout: 60000, // 60 seconds
