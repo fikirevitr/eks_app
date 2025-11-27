@@ -16,6 +16,7 @@ import { storage } from '../utils/storage';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import { StatusBar } from 'react-native';
 
 const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
