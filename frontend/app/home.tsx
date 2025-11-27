@@ -351,16 +351,20 @@ const styles = StyleSheet.create({
   },
   buttonContent: {
     flex: 1,
+    justifyContent: 'center',
+    marginRight: 8,
   },
   buttonTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#fff',
     marginBottom: 2,
+    flexShrink: 1,
   },
   buttonSubtitle: {
-    fontSize: 12,
+    fontSize: 11,
     color: 'rgba(255, 255, 255, 0.8)',
+    flexShrink: 1,
   },
   buttonArrow: {
     marginLeft: 8,
