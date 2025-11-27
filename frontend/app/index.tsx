@@ -1,4 +1,4 @@
-import { Redirect } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { storage } from '../utils/storage';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
@@ -6,9 +6,17 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 export default function Index() {
   const [loading, setLoading] = useState(true);
   const [hasConfig, setHasConfig] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    checkConfig();
+    // First show splash for 3 seconds
+    const splashTimer = setTimeout(() => {
+      setShowSplash(false);
+      checkConfig();
+    }, 3000);
+
+    return () => clearTimeout(splashTimer);
   }, []);
 
   const checkConfig = async () => {
@@ -21,6 +29,11 @@ export default function Index() {
       setLoading(false);
     }
   };
+
+  // Show splash screen first
+  if (showSplash) {
+    return <Redirect href="/splash" />;
+  }
 
   if (loading) {
     return (
