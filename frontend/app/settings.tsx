@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
+const API_URL = 'https://remote-pi-commander.preview.emergentagent.com';
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SettingsScreen() {
