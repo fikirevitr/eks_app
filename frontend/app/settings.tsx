@@ -187,13 +187,30 @@ export default function SettingsScreen() {
             <View style={{ width: 40 }} />
           </View>
 
-          {/* Current File Name Info */}
-          {currentFileName && (
-            <View style={styles.infoCard}>
-              <Text style={styles.infoLabel}>Mevcut Konfigürasyon Dosyası:</Text>
-              <Text style={styles.infoValue}>{currentFileName}</Text>
-            </View>
-          )}
+          <View style={styles.centerContent}>
+            {/* Current File Name Info */}
+            {currentFileName && (
+              <View style={styles.infoCard}>
+                <Text style={styles.infoLabel}>Mevcut Konfigürasyon Dosyası:</Text>
+                <Text style={styles.infoValue}>{currentFileName}</Text>
+                
+                {loadedDate && (
+                  <View style={styles.dateContainer}>
+                    <Ionicons name="calendar-outline" size={14} color="#666" />
+                    <Text style={styles.dateLabel}>Yüklenme Tarihi:</Text>
+                    <Text style={styles.dateValue}>{formatDate(loadedDate)}</Text>
+                  </View>
+                )}
+                
+                {updatedDate && loadedDate !== updatedDate && (
+                  <View style={styles.dateContainer}>
+                    <Ionicons name="refresh-circle-outline" size={14} color="#666" />
+                    <Text style={styles.dateLabel}>Son Güncelleme:</Text>
+                    <Text style={styles.dateValue}>{formatDate(updatedDate)}</Text>
+                  </View>
+                )}
+              </View>
+            )}
 
           {/* Action Buttons */}
           <View style={styles.buttonGroup}>
