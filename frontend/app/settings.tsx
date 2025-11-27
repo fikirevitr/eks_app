@@ -242,7 +242,7 @@ export default function SettingsScreen() {
               ) : (
                 <>
                   <Ionicons name="cloud-download-outline" size={20} color="#fff" />
-                  <Text style={styles.buttonText}>URL Güncelle ve İndir</Text>
+                  <Text style={styles.buttonText}>Güncelle</Text>
                 </>
               )}
             </TouchableOpacity>
