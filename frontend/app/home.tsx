@@ -157,7 +157,7 @@ export default function HomeScreen() {
             >
               <Ionicons
                 name={page.pageIcon as any}
-                size={20}
+                size={16}
                 color={selectedPage === page.pageId ? '#007AFF' : '#666'}
               />
               <Text
