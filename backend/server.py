@@ -276,7 +276,8 @@ async def fetch_external_config(url: str):
     """Fetch configuration JSON from external URL (proxy to avoid CORS)"""
     import httpx
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        logger.info(f"Fetching config from: {url}")
+        async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
             response = await client.get(url)
             response.raise_for_status()
             config_data = response.json()
@@ -285,12 +286,22 @@ async def fetch_external_config(url: str):
             if not config_data.get('app_name') or not config_data.get('pages') or not config_data.get('buttons'):
                 raise ValueError('Invalid configuration format')
             
+            logger.info(f"Successfully fetched config: {config_data.get('app_name')}")
             return config_data
-    except httpx.HTTPError as e:
-        raise HTTPException(status_code=502, detail=f"Failed to fetch config: {str(e)}")
+    except httpx.TimeoutException:
+        logger.error(f"Timeout fetching config from {url}")
+        raise HTTPException(status_code=504, detail="Request timeout - config server took too long to respond")
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP error fetching config: {e.response.status_code}")
+        raise HTTPException(status_code=502, detail=f"Config server returned {e.response.status_code}")
+    except httpx.RequestError as e:
+        logger.error(f"Request error fetching config: {str(e)}")
+        raise HTTPException(status_code=502, detail=f"Failed to connect to config server: {str(e)}")
     except ValueError as e:
+        logger.error(f"Invalid config format: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Unexpected error fetching config: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error loading config: {str(e)}")
 
 # Include router
