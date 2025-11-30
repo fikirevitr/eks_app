@@ -18,7 +18,7 @@ import { useRouter } from 'expo-router';
 import { storage } from '../utils/storage';
 import axios from 'axios';
 
-const API_URL = 'https://pi-control.preview.emergentagent.com';
+const API_URL = 'https://ssh-pi-control.preview.emergentagent.com';
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SetupScreen() {

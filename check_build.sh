@@ -23,7 +23,7 @@ while true; do
         echo "   Konum: /app/frontend/android/app/build/outputs/apk/release/"
         echo ""
         echo "🌐 İndirme Linki:"
-        echo "   https://pi-control.preview.emergentagent.com:8888/app-release.apk"
+        echo "   https://ssh-pi-control.preview.emergentagent.com:8888/app-release.apk"
         echo ""
         echo "📥 APK'yı indirmek için yukarıdaki linki tarayıcınızda açın"
         break

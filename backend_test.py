@@ -10,7 +10,7 @@ import sys
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://pi-control.preview.emergentagent.com"
+BACKEND_URL = "https://ssh-pi-control.preview.emergentagent.com"
 
 def test_root_endpoint():
     """Test GET /api/ endpoint"""
