@@ -1,6 +1,0 @@
-{
-  "name": "ssh-module",
-  "version": "1.0.0",
-  "description": "Native SSH module for Oniks EKS APP",
-  "main": "index.js"
-}
