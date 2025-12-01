@@ -340,7 +340,6 @@ function CommandButton({ button, onPress, buttonStatus }: CommandButtonProps) {
           isExecuting && styles.commandButtonExecuting,
         ]}
         onPress={handlePress}
-        disabled={isExecuting}
         activeOpacity={0.8}
       >
         <View style={styles.buttonIcon}>
