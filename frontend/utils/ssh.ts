@@ -1,9 +1,8 @@
-// SSH execution via backend API (WebSocket proxy)
-// Native SSH modülü Expo managed workflow ile uyumsuz olduğu için
-// backend üzerinden SSH proxy kullanılıyor
+// Native SSH Client - Tam Offline Çalışır
+// Development Build ile react-native-ssh-sftp kullanılıyor
+// Cihaz ve Raspberry Pi aynı local network'te olmalı
 
-import axios from 'axios';
-import Constants from 'expo-constants';
+import SSHClient from 'react-native-ssh-sftp';
 
 export interface SSHConfig {
   host: string;
@@ -18,96 +17,144 @@ export interface SSHResult {
   error?: string;
 }
 
-// Backend URL'i al
-const getBackendUrl = (): string => {
-  // Önce extra config'den al
-  const extraUrl = Constants.expoConfig?.extra?.EXPO_BACKEND_URL;
-  if (extraUrl) {
-    return extraUrl;
-  }
-  // Fallback
-  return 'https://oniksbilgi.com.tr/api';
-};
+// SSH client instance'ını tutmak için
+let currentClient: any = null;
 
 export async function executeSSHCommand(
   config: SSHConfig,
   command: string
 ): Promise<SSHResult> {
-  try {
-    const backendUrl = getBackendUrl();
-    
-    // Backend'e SSH isteği gönder
-    const response = await axios.post(
-      `${backendUrl}/ssh/execute`,
-      {
-        host: config.host,
-        port: config.port,
-        username: config.username,
-        password: config.password,
-        command: command,
-      },
-      {
-        timeout: 30000, // 30 saniye timeout
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  return new Promise((resolve) => {
+    try {
+      // Önceki bağlantıyı kapat
+      if (currentClient) {
+        try {
+          currentClient.disconnect();
+        } catch (e) {
+          // Ignore
+        }
+        currentClient = null;
       }
-    );
 
-    if (response.data && response.data.success) {
-      return {
-        success: true,
-        output: response.data.output || 'Komut başarıyla çalıştırıldı',
-      };
-    } else {
-      return {
+      console.log(`SSH Bağlanıyor: ${config.host}:${config.port}`);
+      
+      // Yeni SSH client oluştur ve bağlan
+      currentClient = new SSHClient(
+        config.host,
+        config.port,
+        config.username,
+        config.password,
+        (error: any) => {
+          if (error) {
+            console.error('SSH Bağlantı Hatası:', error);
+            currentClient = null;
+            resolve({
+              success: false,
+              error: getErrorMessage(error),
+            });
+            return;
+          }
+
+          console.log('SSH Bağlantı başarılı, komut çalıştırılıyor...');
+          
+          // Komut çalıştır
+          currentClient.execute(command, (execError: any, output: string) => {
+            // Bağlantıyı kapat
+            try {
+              currentClient.disconnect();
+            } catch (e) {
+              // Ignore
+            }
+            currentClient = null;
+
+            if (execError) {
+              console.error('SSH Komut Hatası:', execError);
+              resolve({
+                success: false,
+                error: getErrorMessage(execError),
+              });
+              return;
+            }
+
+            console.log('SSH Komut çıktısı:', output);
+            resolve({
+              success: true,
+              output: output || 'Komut başarıyla çalıştırıldı',
+            });
+          });
+        }
+      );
+
+      // Timeout kontrolü (30 saniye)
+      setTimeout(() => {
+        if (currentClient) {
+          try {
+            currentClient.disconnect();
+          } catch (e) {
+            // Ignore
+          }
+          currentClient = null;
+          resolve({
+            success: false,
+            error: 'Bağlantı zaman aşımına uğradı (30 saniye)',
+          });
+        }
+      }, 30000);
+
+    } catch (err: any) {
+      console.error('SSH Genel Hata:', err);
+      if (currentClient) {
+        try {
+          currentClient.disconnect();
+        } catch (e) {
+          // Ignore
+        }
+        currentClient = null;
+      }
+      resolve({
         success: false,
-        error: response.data?.error || 'Komut çalıştırılamadı',
-      };
+        error: getErrorMessage(err),
+      });
     }
-  } catch (err: any) {
-    console.error('SSH Error:', err);
-    return {
-      success: false,
-      error: getErrorMessage(err),
-    };
+  });
+}
+
+// Bağlantıyı manuel kapatma fonksiyonu
+export function disconnectSSH(): void {
+  if (currentClient) {
+    try {
+      currentClient.disconnect();
+    } catch (e) {
+      // Ignore
+    }
+    currentClient = null;
   }
 }
 
 function getErrorMessage(err: any): string {
-  if (err.response) {
-    // Server yanıt verdi ama hata döndü
-    const data = err.response.data;
-    if (data && data.error) {
-      return data.error;
-    }
-    if (err.response.status === 404) {
-      return 'SSH servisi bulunamadı. Backend yapılandırmasını kontrol edin.';
-    }
-    if (err.response.status === 500) {
-      return 'Sunucu hatası. SSH bağlantısı kurulamadı.';
-    }
-  }
+  const message = err?.message || err?.toString() || '';
   
-  if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+  if (message.includes('timeout') || message.includes('Timeout')) {
     return 'Bağlantı zaman aşımına uğradı. Cihaz yanıt vermiyor.';
   }
-  
-  if (err.code === 'ERR_NETWORK' || err.message?.includes('Network')) {
-    return 'Ağ hatası. İnternet bağlantınızı kontrol edin.';
+  if (message.includes('refused') || message.includes('Connection refused')) {
+    return 'Bağlantı reddedildi. SSH servisi çalışıyor mu kontrol edin.';
+  }
+  if (message.includes('authentication') || message.includes('Authentication') || message.includes('password')) {
+    return 'Kimlik doğrulama hatası. Kullanıcı adı veya şifre yanlış.';
+  }
+  if (message.includes('host') || message.includes('Host') || message.includes('resolve')) {
+    return 'Host bulunamadı. IP adresini kontrol edin.';
+  }
+  if (message.includes('network') || message.includes('Network') || message.includes('unreachable')) {
+    return 'Ağ hatası. Aynı WiFi ağında olduğunuzdan emin olun.';
+  }
+  if (message.includes('socket') || message.includes('Socket')) {
+    return 'Bağlantı hatası. Raspberry Pi\'nin açık olduğundan emin olun.';
   }
   
-  if (err.message) {
-    if (err.message.includes('refused')) {
-      return 'Bağlantı reddedildi. SSH servisi çalışıyor mu kontrol edin.';
-    }
-    if (err.message.includes('authentication')) {
-      return 'Kimlik doğrulama hatası. Kullanıcı adı veya şifre yanlış.';
-    }
-    if (err.message.includes('host')) {
-      return 'Host bulunamadı. IP adresini kontrol edin.';
-    }
-    return err.message;
+  if (message) {
+    return message;
   }
   
   return 'SSH bağlantı hatası oluştu.';
