@@ -115,23 +115,36 @@ export default function ExecuteScreen() {
     setOutput('');
     setError('');
     setElapsedMinutes(0);
-    const now = new Date();
-    setStartTime(now);
+    setStartTime(null); // Timer henüz başlamadı
 
-    // Save executing status to storage
+    // Save connecting status to storage
     try {
       await storage.setItem(`button_status_${button.id}`, JSON.stringify({
         status: 'executing',
-        timestamp: now.toISOString(),
-        startTime: now.toISOString(),
-        message: 'Çalıştırılıyor...',
+        timestamp: new Date().toISOString(),
+        message: 'Bağlanıyor...',
       }));
     } catch (e) {
       console.error('Error saving button status:', e);
     }
 
     try {
+      // SSH bağlantısı kuruldu, şimdi timer başlasın
       setStatus('executing');
+      const commandStartTime = new Date();
+      setStartTime(commandStartTime);
+      
+      // Save executing status with start time
+      try {
+        await storage.setItem(`button_status_${button.id}`, JSON.stringify({
+          status: 'executing',
+          timestamp: commandStartTime.toISOString(),
+          startTime: commandStartTime.toISOString(),
+          message: 'Çalıştırılıyor...',
+        }));
+      } catch (e) {
+        console.error('Error saving button status:', e);
+      }
       
       // Execute SSH command directly
       const result = await executeSSHCommand(
