@@ -77,11 +77,20 @@ export default function SettingsScreen() {
         ? currentFileName 
         : currentFileName + '.json';
       const fullUrl = BASE_URL + fileNameWithExtension;
-      const response = await axios.get(`${API_URL}/api/config/fetch`, {
-        params: { url: fullUrl },
-        timeout: 60000, // 60 seconds
+      
+      // Doğrudan JSON dosyasını çek - backend proxy kullanmıyoruz
+      const response = await axios.get(fullUrl, {
+        timeout: 30000, // 30 saniye
+        headers: {
+          'Accept': 'application/json',
+        },
       });
       const config = response.data;
+
+      // Validate config structure
+      if (!config.app_name || !config.pages || !config.buttons) {
+        throw new Error('Geçersiz konfigürasyon formatı');
+      }
 
       // Update config and update date
       const currentDate = new Date().toISOString();
@@ -94,7 +103,22 @@ export default function SettingsScreen() {
       ]);
     } catch (error: any) {
       console.error('Error refreshing config:', error);
-      Alert.alert('Hata', 'Konfigürasyon yenilenemedi');
+      
+      let errorMessage = 'Konfigürasyon yenilenemedi';
+      
+      if (error.response) {
+        if (error.response.status === 404) {
+          errorMessage = 'Konfigürasyon dosyası bulunamadı.';
+        } else {
+          errorMessage = `Sunucu hatası: ${error.response.status}`;
+        }
+      } else if (error.code === 'ECONNABORTED') {
+        errorMessage = 'Bağlantı zaman aşımına uğradı.';
+      } else if (error.message?.includes('Network')) {
+        errorMessage = 'Ağ hatası. İnternet bağlantınızı kontrol edin.';
+      }
+      
+      Alert.alert('Hata', errorMessage);
     } finally {
       setLoading(false);
     }
