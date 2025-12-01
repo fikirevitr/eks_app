@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "onikseks",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "extra": {
       "EXPO_BACKEND_URL": "https://oniksbilgi.com.tr/api",
       "router": {},
