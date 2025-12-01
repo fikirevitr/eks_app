@@ -8,12 +8,16 @@ import {
   ActivityIndicator,
   Alert,
   StatusBar,
+  Vibration,
+  Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storage } from '../utils/storage';
 import { executeSSHCommand } from '../utils/ssh';
+import * as Haptics from 'expo-haptics';
+import CircularProgress from '../components/CircularProgress';
 
 interface Button {
   id: string;
@@ -21,6 +25,7 @@ interface Button {
   subtitle?: string;
   icon: string;
   color: string;
+  estimated_duration?: number; // Dakika cinsinden
   ssh: {
     host: string;
     port: number;
@@ -38,7 +43,10 @@ export default function ExecuteScreen() {
   const [output, setOutput] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [status, setStatus] = useState<'idle' | 'connecting' | 'executing' | 'success' | 'error'>('idle');
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [elapsedMinutes, setElapsedMinutes] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (params.buttonData && typeof params.buttonData === 'string') {
@@ -53,6 +61,52 @@ export default function ExecuteScreen() {
     }
   }, [params.buttonData, router]);
 
+  // Timer effect - geçen süreyi takip et
+  useEffect(() => {
+    if (executing && startTime) {
+      timerRef.current = setInterval(() => {
+        const elapsed = (Date.now() - startTime.getTime()) / 1000 / 60;
+        setElapsedMinutes(elapsed);
+      }, 1000);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [executing, startTime]);
+
+  // Bildirim fonksiyonları
+  const notifySuccess = async () => {
+    try {
+      // Haptic feedback
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      // Titresim
+      if (Platform.OS === 'android') {
+        Vibration.vibrate([0, 100, 100, 100]);
+      }
+    } catch (e) {
+      console.log('Haptics not available');
+    }
+  };
+
+  const notifyError = async () => {
+    try {
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      if (Platform.OS === 'android') {
+        Vibration.vibrate([0, 200, 100, 200, 100, 200]);
+      }
+    } catch (e) {
+      console.log('Haptics not available');
+    }
+  };
+
   const executeCommand = useCallback(async () => {
     if (!button) return;
 
@@ -60,12 +114,16 @@ export default function ExecuteScreen() {
     setStatus('connecting');
     setOutput('');
     setError('');
+    setElapsedMinutes(0);
+    const now = new Date();
+    setStartTime(now);
 
     // Save executing status to storage
     try {
       await storage.setItem(`button_status_${button.id}`, JSON.stringify({
         status: 'executing',
-        timestamp: new Date().toISOString(),
+        timestamp: now.toISOString(),
+        startTime: now.toISOString(),
         message: 'Çalıştırılıyor...',
       }));
     } catch (e) {
@@ -89,6 +147,7 @@ export default function ExecuteScreen() {
       if (result.success) {
         setStatus('success');
         setOutput(result.output || 'Komut başarıyla çalıştırıldı');
+        await notifySuccess();
         
         // Save success status
         await storage.setItem(`button_status_${button.id}`, JSON.stringify({
@@ -99,6 +158,7 @@ export default function ExecuteScreen() {
       } else {
         setStatus('error');
         setError(result.error || 'Komut çalıştırılamadı');
+        await notifyError();
         
         // Save error status
         await storage.setItem(`button_status_${button.id}`, JSON.stringify({
@@ -112,6 +172,7 @@ export default function ExecuteScreen() {
       setStatus('error');
       const errorMsg = err.message || 'SSH komut çalıştırma hatası';
       setError(errorMsg);
+      await notifyError();
       
       // Save error status
       try {
@@ -142,6 +203,18 @@ export default function ExecuteScreen() {
     router.back();
   };
 
+  // Progress hesaplama
+  const getProgress = (): number => {
+    if (!button?.estimated_duration || button.estimated_duration === 0) return 0;
+    const progress = (elapsedMinutes / button.estimated_duration) * 100;
+    return Math.min(progress, 100);
+  };
+
+  const getRemainingMinutes = (): number => {
+    if (!button?.estimated_duration) return 0;
+    return Math.max(0, button.estimated_duration - elapsedMinutes);
+  };
+
   if (!button) {
     return (
       <View style={styles.loadingContainer}>
@@ -149,6 +222,8 @@ export default function ExecuteScreen() {
       </View>
     );
   }
+
+  const hasEstimatedDuration = button.estimated_duration && button.estimated_duration > 0;
 
   return (
     <View style={styles.container}>
@@ -169,13 +244,34 @@ export default function ExecuteScreen() {
         </View>
       </SafeAreaView>
 
-      {/* Status Badge */}
-      <View style={styles.statusContainer}>
-        <View style={[styles.statusBadge, getStatusStyle(status)]}>
-          {executing && <ActivityIndicator size="small" color="#fff" style={{ marginRight: 8 }} />}
-          <Ionicons name={getStatusIcon(status)} size={20} color="#fff" />
-          <Text style={styles.statusText}>{getStatusText(status)}</Text>
-        </View>
+      {/* Circular Progress veya Status Badge */}
+      <View style={styles.progressContainer}>
+        {hasEstimatedDuration && executing ? (
+          <CircularProgress
+            size={140}
+            strokeWidth={12}
+            progress={getProgress()}
+            remainingMinutes={getRemainingMinutes()}
+            totalMinutes={button.estimated_duration!}
+            color={button.color}
+          />
+        ) : (
+          <View style={[styles.statusBadge, getStatusStyle(status)]}>
+            {executing && <ActivityIndicator size="small" color="#fff" style={{ marginRight: 8 }} />}
+            <Ionicons name={getStatusIcon(status)} size={24} color="#fff" />
+            <Text style={styles.statusText}>{getStatusText(status)}</Text>
+          </View>
+        )}
+        
+        {/* Tahmini süre bilgisi */}
+        {hasEstimatedDuration && (
+          <View style={styles.durationInfo}>
+            <Ionicons name="time-outline" size={16} color="#666" />
+            <Text style={styles.durationText}>
+              Tahmini süre: {button.estimated_duration} dakika
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* Command Info */}
@@ -186,7 +282,7 @@ export default function ExecuteScreen() {
         </View>
         <View style={styles.infoRow}>
           <Ionicons name="terminal-outline" size={16} color="#666" />
-          <Text style={styles.infoText}>{button.ssh.command}</Text>
+          <Text style={styles.infoText} numberOfLines={2}>{button.ssh.command}</Text>
         </View>
       </View>
 
@@ -209,7 +305,7 @@ export default function ExecuteScreen() {
             <Text style={styles.errorText}>{error}</Text>
           </View>
         )}
-        {!output && !error && executing && (
+        {!output && !error && executing && !hasEstimatedDuration && (
           <View style={styles.executingBox}>
             <ActivityIndicator size="large" color="#007AFF" />
             <Text style={styles.executingText}>Komut çalıştırılıyor...</Text>
@@ -329,16 +425,25 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.9)',
     marginTop: 4,
   },
-  statusContainer: {
-    padding: 16,
+  progressContainer: {
+    padding: 20,
     alignItems: 'center',
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginTop: -20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 24,
   },
   statusIdle: {
     backgroundColor: '#999',
@@ -354,14 +459,26 @@ const styles = StyleSheet.create({
   },
   statusText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
+    marginLeft: 8,
+  },
+  durationInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  durationText: {
+    fontSize: 13,
+    color: '#666',
     marginLeft: 6,
   },
   commandInfo: {
     backgroundColor: '#fff',
     margin: 16,
-    marginTop: 0,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
@@ -410,13 +527,13 @@ const styles = StyleSheet.create({
   outputText: {
     fontSize: 14,
     color: '#333',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     lineHeight: 20,
   },
   errorText: {
     fontSize: 14,
     color: '#FF3B30',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     lineHeight: 20,
   },
   executingBox: {
