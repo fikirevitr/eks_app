@@ -1,6 +1,6 @@
 // Native SSH Client - Tam Offline Çalışır
 // @speedshield/react-native-ssh-sftp kullanılıyor (güncel fork)
-// Cihaz ve Raspberry Pi aynı local network'te olmalı
+// Cihaz ve EKS cihazı aynı local network'te olmalı
 
 import SSHClient from '@speedshield/react-native-ssh-sftp';
 
@@ -128,7 +128,7 @@ function getErrorMessage(err: any): string {
   
   // Zaman aşımı
   if (message.includes('timeout') || message.includes('Timeout') || message.includes('zaman aşımı')) {
-    return 'Bağlantı zaman aşımına uğradı. Raspberry Pi yanıt vermiyor.';
+    return 'Bağlantı zaman aşımına uğradı. EKS cihazı yanıt vermiyor.';
   }
   
   // Bağlantı reddedildi
@@ -156,7 +156,7 @@ function getErrorMessage(err: any): string {
   
   // Socket hatası
   if (message.includes('socket') || message.includes('Socket') || message.includes('ECONNRESET')) {
-    return 'Bağlantı hatası. Raspberry Pi\'nin açık olduğundan emin olun.';
+    return 'Bağlantı hatası. EKS cihazının açık olduğundan emin olun.';
   }
 
   // Port hatası
