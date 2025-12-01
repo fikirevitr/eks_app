@@ -18,7 +18,7 @@ import { useRouter } from 'expo-router';
 import { storage } from '../utils/storage';
 import axios from 'axios';
 
-const API_URL = 'https://ssh-pi-control.preview.emergentagent.com';
+// Config dosyalarının base URL'i - doğrudan erişim
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SetupScreen() {
@@ -38,16 +38,18 @@ export default function SetupScreen() {
       const fileNameWithExtension = fileName.trim() + '.json';
       const fullUrl = BASE_URL + fileNameWithExtension;
       
-      // Fetch JSON through backend proxy to avoid CORS issues
-      const response = await axios.get(`${API_URL}/api/config/fetch`, {
-        params: { url: fullUrl },
-        timeout: 60000, // 60 seconds
+      // Doğrudan JSON dosyasını çek - backend proxy kullanmıyoruz
+      const response = await axios.get(fullUrl, {
+        timeout: 30000, // 30 saniye
+        headers: {
+          'Accept': 'application/json',
+        },
       });
       const config = response.data;
 
       // Validate config structure
       if (!config.app_name || !config.pages || !config.buttons) {
-        throw new Error('Invalid configuration format');
+        throw new Error('Geçersiz konfigürasyon formatı');
       }
 
       // Store config, file name, full URL, and timestamps
@@ -63,10 +65,27 @@ export default function SetupScreen() {
       ]);
     } catch (error: any) {
       console.error('Error loading config:', error);
-      Alert.alert(
-        'Hata',
-        error.response?.data?.detail || error.message || 'JSON yüklenirken hata oluştu'
-      );
+      
+      let errorMessage = 'JSON yüklenirken hata oluştu';
+      
+      if (error.response) {
+        // Sunucu yanıt verdi ama hata döndü
+        if (error.response.status === 404) {
+          errorMessage = 'Konfigürasyon dosyası bulunamadı. Dosya adını kontrol edin.';
+        } else if (error.response.status === 403) {
+          errorMessage = 'Erişim engellendi. Yetki hatası.';
+        } else {
+          errorMessage = `Sunucu hatası: ${error.response.status}`;
+        }
+      } else if (error.code === 'ECONNABORTED') {
+        errorMessage = 'Bağlantı zaman aşımına uğradı. İnternet bağlantınızı kontrol edin.';
+      } else if (error.message?.includes('Network')) {
+        errorMessage = 'Ağ hatası. İnternet bağlantınızı kontrol edin.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      Alert.alert('Hata', errorMessage);
     } finally {
       setLoading(false);
     }
