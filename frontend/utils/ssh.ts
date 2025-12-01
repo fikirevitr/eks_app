@@ -1,4 +1,9 @@
-import SSHClient from '@speedshield/react-native-ssh-sftp';
+// SSH execution via backend API (WebSocket proxy)
+// Native SSH modülü Expo managed workflow ile uyumsuz olduğu için
+// backend üzerinden SSH proxy kullanılıyor
+
+import axios from 'axios';
+import Constants from 'expo-constants';
 
 export interface SSHConfig {
   host: string;
@@ -13,39 +18,55 @@ export interface SSHResult {
   error?: string;
 }
 
+// Backend URL'i al
+const getBackendUrl = (): string => {
+  // Önce extra config'den al
+  const extraUrl = Constants.expoConfig?.extra?.EXPO_BACKEND_URL;
+  if (extraUrl) {
+    return extraUrl;
+  }
+  // Fallback
+  return 'https://oniksbilgi.com.tr/api';
+};
+
 export async function executeSSHCommand(
   config: SSHConfig,
   command: string
 ): Promise<SSHResult> {
   try {
-    // Connect to SSH
-    await SSHClient.connectWithPassword(
-      config.host,
-      config.port,
-      config.username,
-      config.password
+    const backendUrl = getBackendUrl();
+    
+    // Backend'e SSH isteği gönder
+    const response = await axios.post(
+      `${backendUrl}/ssh/execute`,
+      {
+        host: config.host,
+        port: config.port,
+        username: config.username,
+        password: config.password,
+        command: command,
+      },
+      {
+        timeout: 30000, // 30 saniye timeout
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
 
-    // Execute command
-    const output = await SSHClient.execute(command);
-
-    // Disconnect
-    await SSHClient.disconnect();
-
-    return {
-      success: true,
-      output: output || 'Komut başarıyla çalıştırıldı',
-    };
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        output: response.data.output || 'Komut başarıyla çalıştırıldı',
+      };
+    } else {
+      return {
+        success: false,
+        error: response.data?.error || 'Komut çalıştırılamadı',
+      };
+    }
   } catch (err: any) {
     console.error('SSH Error:', err);
-    
-    // Disconnect on error
-    try {
-      await SSHClient.disconnect();
-    } catch (e) {
-      // Ignore disconnect errors
-    }
-
     return {
       success: false,
       error: getErrorMessage(err),
@@ -54,10 +75,29 @@ export async function executeSSHCommand(
 }
 
 function getErrorMessage(err: any): string {
-  if (err.message) {
-    if (err.message.includes('timeout')) {
-      return 'Bağlantı zaman aşımına uğradı. Cihaz yanıt vermiyor.';
+  if (err.response) {
+    // Server yanıt verdi ama hata döndü
+    const data = err.response.data;
+    if (data && data.error) {
+      return data.error;
     }
+    if (err.response.status === 404) {
+      return 'SSH servisi bulunamadı. Backend yapılandırmasını kontrol edin.';
+    }
+    if (err.response.status === 500) {
+      return 'Sunucu hatası. SSH bağlantısı kurulamadı.';
+    }
+  }
+  
+  if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+    return 'Bağlantı zaman aşımına uğradı. Cihaz yanıt vermiyor.';
+  }
+  
+  if (err.code === 'ERR_NETWORK' || err.message?.includes('Network')) {
+    return 'Ağ hatası. İnternet bağlantınızı kontrol edin.';
+  }
+  
+  if (err.message) {
     if (err.message.includes('refused')) {
       return 'Bağlantı reddedildi. SSH servisi çalışıyor mu kontrol edin.';
     }
@@ -69,5 +109,6 @@ function getErrorMessage(err: any): string {
     }
     return err.message;
   }
+  
   return 'SSH bağlantı hatası oluştu.';
 }
