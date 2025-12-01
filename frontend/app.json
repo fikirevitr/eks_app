@@ -24,7 +24,11 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.oniksbilgi.eksapp",
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "statusBar": {
+        "backgroundColor": "#000000",
+        "barStyle": "light-content"
+      }
     },
     "web": {
       "bundler": "metro",
