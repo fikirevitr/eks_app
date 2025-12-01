@@ -19,7 +19,6 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "@shopify/flash-list": "^2.2.0",
-    "@speedshield/react-native-ssh-sftp": "^1.5.25",
     "axios": "^1.13.2",
     "expo": "^54.0.25",
     "expo-blur": "~14.1.5",

@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "onikseks",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "extra": {
       "EXPO_BACKEND_URL": "https://oniksbilgi.com.tr/api",
       "router": {},
@@ -41,8 +41,7 @@
           "resizeMode": "contain",
           "backgroundColor": "#000"
         }
-      ],
-      "./plugins/withSSH.js"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
