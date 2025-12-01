@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { StatusBar } from 'react-native';
 
-const API_URL = 'https://ssh-pi-control.preview.emergentagent.com';
+// Config dosyalarının base URL'i - doğrudan erişim
 const BASE_URL = 'https://oniksbilgi.com.tr/cdn/jsons/';
 
 export default function SettingsScreen() {
