@@ -38,11 +38,17 @@ export default function SetupScreen() {
       const fileNameWithExtension = fileName.trim() + '.json';
       const fullUrl = BASE_URL + fileNameWithExtension;
       
-      // Doğrudan JSON dosyasını çek - backend proxy kullanmıyoruz
-      const response = await axios.get(fullUrl, {
+      // Cache-busting: URL'e timestamp ekle
+      const cacheBustUrl = `${fullUrl}?t=${Date.now()}`;
+      
+      // Doğrudan JSON dosyasını çek - cache bypass ile
+      const response = await axios.get(cacheBustUrl, {
         timeout: 30000, // 30 saniye
         headers: {
           'Accept': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       });
       const config = response.data;
