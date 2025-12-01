@@ -22,6 +22,7 @@ import Animated, {
   withSpring,
   withSequence,
 } from 'react-native-reanimated';
+import TimerBadge from '../components/TimerBadge';
 
 const { width } = Dimensions.get('window');
 
@@ -42,6 +43,7 @@ interface Button {
   icon: string;
   color: string;
   ssh: SSHConfig;
+  estimated_duration?: number; // Dakika cinsinden tahmini süre
 }
 
 interface Page {
@@ -62,6 +64,7 @@ interface ButtonStatus {
   status: 'idle' | 'executing' | 'success' | 'error';
   timestamp: string;
   message: string;
+  startTime?: string; // İşlemin başladığı zaman
 }
 
 export default function HomeScreen() {
@@ -252,6 +255,7 @@ interface CommandButtonProps {
 function CommandButton({ button, onPress, buttonStatus }: CommandButtonProps) {
   const scale = useSharedValue(1);
   const isExecuting = buttonStatus?.status === 'executing';
+  const hasEstimatedDuration = button.estimated_duration && button.estimated_duration > 0;
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -318,7 +322,17 @@ function CommandButton({ button, onPress, buttonStatus }: CommandButtonProps) {
         <View style={styles.buttonContent}>
           <View style={styles.buttonTitleRow}>
             <Text style={styles.buttonTitle}>{button.title}</Text>
-            {buttonStatus && buttonStatus.status !== 'idle' && (
+            {/* Timer Badge - Çalışıyorsa canlı, değilse tahmini süre */}
+            {hasEstimatedDuration && (
+              <TimerBadge
+                startTime={buttonStatus?.startTime ? new Date(buttonStatus.startTime) : new Date()}
+                estimatedMinutes={button.estimated_duration!}
+                isRunning={isExecuting}
+                compact={true}
+              />
+            )}
+            {/* Status Badge - Sadece tahmini süre yoksa göster */}
+            {!hasEstimatedDuration && buttonStatus && buttonStatus.status !== 'idle' && (
               <View style={[styles.textBadge, { backgroundColor: getBadgeColor(buttonStatus.status) }]}>
                 <Text style={styles.badgeText}>{getBadgeText(buttonStatus.status)}</Text>
               </View>
@@ -327,7 +341,7 @@ function CommandButton({ button, onPress, buttonStatus }: CommandButtonProps) {
           {button.subtitle && (
             <Text style={styles.buttonSubtitle}>{button.subtitle}</Text>
           )}
-          {buttonStatus && buttonStatus.message && (
+          {buttonStatus && buttonStatus.message && buttonStatus.status !== 'executing' && (
             <Text style={styles.statusMessage} numberOfLines={2}>
               {buttonStatus.message}
             </Text>
