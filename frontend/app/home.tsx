@@ -135,7 +135,41 @@ export default function HomeScreen() {
     }
   };
 
+  // Kalan süreyi hesapla
+  const getRemainingTime = (buttonStatus: ButtonStatus, estimatedDuration?: number): string => {
+    if (!buttonStatus.startTime || !estimatedDuration) return '';
+    
+    const startTime = new Date(buttonStatus.startTime);
+    const elapsedMinutes = (Date.now() - startTime.getTime()) / 1000 / 60;
+    const remainingMinutes = Math.max(0, estimatedDuration - elapsedMinutes);
+    
+    const mins = Math.floor(remainingMinutes);
+    const secs = Math.round((remainingMinutes - mins) * 60);
+    
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const handleButtonPress = (button: Button) => {
+    const buttonStatus = buttonStatuses[button.id];
+    
+    // İşlem devam ediyorsa uyarı göster ve engelle
+    if (buttonStatus?.status === 'executing') {
+      const remainingTime = button.estimated_duration 
+        ? getRemainingTime(buttonStatus, button.estimated_duration)
+        : null;
+      
+      const message = remainingTime 
+        ? `Bu komut zaten çalışıyor.\n\nTahmini kalan süre: ${remainingTime}\n\nLütfen işlemin tamamlanmasını bekleyin.`
+        : 'Bu komut zaten çalışıyor.\n\nLütfen işlemin tamamlanmasını bekleyin.';
+      
+      Alert.alert(
+        'İşlem Devam Ediyor',
+        message,
+        [{ text: 'Tamam', style: 'default' }]
+      );
+      return;
+    }
+    
     router.push({
       pathname: '/execute',
       params: {
